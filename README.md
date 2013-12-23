@@ -9,6 +9,8 @@ The goal of this project is to build an easy-to-use tool for translating MATLAB 
 
 The translator consists of two parts: the first is a front end user interface, written in Java; the second is the back end translator, written in Perl.
 
+Please read summary_paper.pdf for more information.
+
 The Java (.java) source code and the Perl (.pl) source code must be located in the same directory. If you are running the translator for the first time or after editing the Java source code, enter into the terminal
 javac TranslatorGUI.java
 from the directory in which they are located to build the class file. Enter
@@ -18,7 +20,5 @@ to launch the program. The Perl script will be run by the Java interface that ha
 If for some reason the Perl script freezes, the Java interface may continue to wait for it until it is terminated. Terminate the Perl script; you do not need to close or restart the Java interface.
 
 This project gave me an exciting and unique opportunity to become closer acquainted with Julia, MATLAB, Perl, Java, and LaTeX. My hope is that other Julia users will find it as interesting as I have and help to make it a truly powerful tool. 
-
-Please read summary_paper.pdf for more information.
 
 Thank you to anyone who contributes to this project in the future and helps it grow and improve. I am excited to see where you take it and I'm glad to have your invaluable help.
