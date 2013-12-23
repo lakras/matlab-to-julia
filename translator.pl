@@ -350,14 +350,14 @@ while($contents =~ /\s*([^@\s]+)\s*\(.*\)/g)
     $possible_matrix_name_ends = $+[1];
     
     # not defined as matrix, but defined as function
-    if(!$matrixes{$possible_matrix_name} && $functions{$possible_matrix_name})
-    {
-        # leave as is
-    }
-    # defined as matrix or matrix by default
-    else
+    if($matrixes{$possible_matrix_name})
     {
         $contents =~ s/(\s*($possible_matrix_name)\s*)\((.*)\)/$1\[$3\]/g
+    }
+    # defined as function or function by default
+    elsif($functions{$possible_matrix_name})
+    {
+        # do nothing
     }
 }
 
