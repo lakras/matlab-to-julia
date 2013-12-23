@@ -1,3 +1,15 @@
+# This is the backend of the program. It reads in MATLAB code
+# from a file, translates it into Julia, and saves the Julia
+# version of the code to another file.
+# 
+# Before this script is called, the MATLAB code read from the
+# frontend interface is saved to a temp file in the same directory
+# as the class file (and this Perl script). This Perl script reads
+# from the MATLAB temp file and saves the Julia translation to a
+# second temp file. After this script is finished translating, the
+# interface reads in and displays the Julia temp file and deletes
+# both temp files.
+
 $directory = "";
 $matlab_temp_file = $directory."MATLAB_temp.txt";
 $julia_temp_file = $directory."Julia_temp.txt";

@@ -1,3 +1,16 @@
+/**
+ * This is the frontend of the program. It is a user interface
+ * that allows users to type MATLAB code or load it from a file,
+ * press a button to translate it into Julia, and then manipulate
+ * and save the resulting Julia code.
+ * 
+ * During translation, the MATLAB code read from the interface is
+ * saved to a temp file in the same directory as the class file.
+ * The Perl script reads from this temp file and saves the Julia
+ * translation to a second temp file. The interface reads in and
+ * displays the Julia temp file and deletes both temp files.
+ */
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
