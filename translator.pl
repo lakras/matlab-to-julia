@@ -190,14 +190,14 @@ $contents =~ s/fprintf\('(.*)'(.*)\)/\@sprintf\("$1"$2\)/g;
 $contents =~ s/([^\s]*)(\s*=)\s*@\s*\((.*)\)/$1\($3\)$2/g;
 
 # FUNCTIONS:
-#     MATLAB:                                      |  Julia:
-#         function [a b] = sum_product(x, y)      |     function sum_product(x,y)
-#            a = x + y;                          |         a = x + y;
+#     MATLAB:                                  |  Julia:
+#        function [a b] = sum_product(x, y)    |     function sum_product(x,y)
+#            a = x + y;                        |         a = x + y;
 #            if a > 5                          |            if a > 5
-#                a = 0                          |                a = 0
-#            end                                  |            end
-#            b = x * y;                          |         b = x * y;        
-#        end <- optional                          |         [a b];
+#                a = 0                         |                a = 0
+#            end                               |            end
+#            b = x * y;                        |         b = x * y;        
+#        end <- optional                       |         [a b];
 #                                              |     end
 if($contents =~ m/function\s*?\[(.*?)\]\s*?=\s*(.*?)\s*?\((.*?)\)\n*(\s*)((\n*.*)*)/)
 {
@@ -340,7 +340,7 @@ foreach $function_name(keys %functions)
 }
 
 # MATRIX INDEXING:
-#      A(0) -> A[0]
+#       A(0) -> A[0]
 #     A(0:2) -> A[0:2]
 # locates and processes all possible matrix indexings (all of which might be function calls)
 while($contents =~ /\s*([^@\s]+)\s*\(.*\)/g)
