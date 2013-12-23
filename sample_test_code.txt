@@ -1,0 +1,65 @@
+x = 6 %{hi
+I am a comment
+hi%}x = 5
+h=@(x, y)mod(x,y)
+
+function [c f] = thisfunction(x, y)
+	f = x + y;
+	c = x * y;
+	if f < 6
+		f = 0
+	end
+	while x == 6
+		c = c + 1
+		if x == y
+			x = 7
+		end
+	end
+end
+
+%comment
+x = 6, y = 7, z = u,
+sqrt(-1)
+
+function [a b] = otherfunction(x, y)
+	b = x + y;
+	a = x * y;
+	if mod(a, 2) == 0
+		a = 9
+	end
+end
+
+function [c d] = temperature(x, y)
+	c = x + y;
+	d = x * y;
+end
+
+h(1, 2)
+c(1, 2)
+d(1)
+otherfunction(4, 5)
+temperature(0)
+temperature
+fprint('%d + %.2f', 1, 4)
+bitxor(j, k)
+bitxor(a + b, 1+2)
+bitand(j, k)
+bitand(a + b, 1+2)
+bitor(j, k)
+bitor(a + b, 1+2)
+a = 'm'
+a = 'mo'
+a = 'moo'
+
+x = 0:0.05:5;
+y = sin(x.^2);
+plot(x, y);
+xlabel('Time')
+ylabel('Amplitude')
+
+function [a b] = unendingfunction(x, y)
+	b = x + y;
+	a = x * y;
+	if mod(a, 2) == 0
+		a = 9
+	end
