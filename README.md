@@ -1,6 +1,12 @@
 matlab-to-julia
 ===============
 
+2017 UPDATE: You can now use the MATLAB to Julia translator (way) more easily! The new version, which lives in a convenient web interface, is here: http://sciencecow.mit.edu/matlab-to-julia/
+
+Happy coding!!!!
+
+===============
+
 Translates MATLAB source code into Julia.
 
 Some of the fields that could most benefit from parallelization primarily use programming languages that were not designed with parallel computing in mind. The MATLAB-to-Julia translator proposed here begins to approach this problem starting with MATLAB, which is syntactically close to Julia. The translator does much of the tedious work of converting source code from MATLAB to Julia, in hopes that a MATLAB user who is curious about Julia could then spend most of their first moments with the language exploring its capacity to improve their existing programs rather than wrangling with bugs or a new syntax. Hopefully with time and input from other Julia users this translator will become a powerful tool and perhaps lower the barrier to switching to Julia.
