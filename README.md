@@ -5,7 +5,7 @@ matlab-to-julia
 
 Happy coding!!!!
 
-===============
+***
 
 Translates MATLAB source code into Julia.
 
