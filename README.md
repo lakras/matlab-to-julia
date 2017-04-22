@@ -1,7 +1,7 @@
 matlab-to-julia
 ===============
 
-2017 UPDATE: You can now use the MATLAB to Julia translator (way) more easily! The new version, which lives in a convenient web interface, is here: http://sciencecow.mit.edu/matlab-to-julia/
+2017 UPDATE: You can now convert your MATLAB code to Julia (way) more easily! The new version, which lives entirely in a convenient web interface, is here: http://sciencecow.mit.edu/matlab-to-julia/
 
 Happy coding!!!!
 
