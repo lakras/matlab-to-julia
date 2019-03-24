@@ -10,3 +10,6 @@ The goal of this project is to build an easy-to-use tool for translating MATLAB 
 The translator can be accessed here: https://lakras.github.io/matlab-to-julia
 
 My hope is that other Julia users will find this project as interesting as I have and help to make it a truly powerful tool. Thank you to anyone who contributes to this project and helps it grow and improve. I am excited to see where you take it and I'm glad to have your invaluable help.
+
+
+[![Build Status](https://travis-ci.com/lakras/matlab-to-julia.svg?branch=master)](https://travis-ci.com/lakras/matlab-to-julia)
