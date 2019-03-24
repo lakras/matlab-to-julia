@@ -1,0 +1,15 @@
+{
+  "name": "learn-travis-lakras",
+  "description": "Simple Travis-CI check for JSHint (Code Linting)",
+  "author": "Lydia Andreyevna Krasilnikova",
+  "version": "0.0.1",
+  "devDependencies":
+  {
+    "jshint": "^2.6.0"
+  },
+  "scripts":
+  {
+    "test1": "jshint matlab_to_julia_translator.js"
+    "test2": "jshint web_page_functions.js"
+  }
+}
