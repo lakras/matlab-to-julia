@@ -22,7 +22,7 @@ runTranslator = function()
 // handles timeout
 var commonErrorMessage = "\n\nPlease consider sending a bug report with your MATLAB code so that the bug causing this timeout can be fixed."
 		+ " You can follow the link below or copy/paste the following URL:"
-		+ "\nhttps://docs.google.com/forms/d/e/1FAIpQLScvH5sN-TLk69V5hipx9Afk54Srn8muBrhJuoV59KkLEeza-Q/viewform?usp=sf_link"
+		+ "\nhttps://docs.google.com/forms/d/e/1FAIpQLScvH5sN-TLk69V5hipx9Afk54Srn8muBrhJuoV59KkLEeza-Q/viewform?usp=sfLink"
 		+ "\n\nIn the meantime, I recommend breaking your code into pieces and translating each piece separately "
 		+ "so that you can get what you can from this translator and get on with your work."
 		+ "\n\nSorry this happened. Thank you!";
@@ -91,34 +91,34 @@ enableTranslateButton = function()
 	document.getElementById("translateButton").disabled=false;
 }
 
-var default_function_names_field_value = "functionName1, functionName2, etc.";
-var default_not_function_names_field_value = "matrixName, variableName, etc.";
+var defaultFunctionNamesFieldValue = "functionName1, functionName2, etc.";
+var defaultNotFunctionNamesFieldValue = "matrixName, variableName, etc.";
 clearFunctionNamesField = function()
 {
-	if(document.getElementById("functionNamesField").value == default_function_names_field_value)
+	if(document.getElementById("functionNamesField").value == defaultFunctionNamesFieldValue)
 	{
 		document.getElementById("functionNamesField").value = "";
 	}
 }
 clearNotFunctionNamesField = function()
 {
-	if(document.getElementById("notFunctionNamesField").value == default_not_function_names_field_value)
+	if(document.getElementById("notFunctionNamesField").value == defaultNotFunctionNamesFieldValue)
 	{
 		document.getElementById("notFunctionNamesField").value = "";
 	}
 }
 
-var options_element_ids = ["functionNamesField", "notFunctionNamesField", "optionsLabel1",
+var optionsElementIDs = ["functionNamesField", "notFunctionNamesField", "optionsLabel1",
 	"optionsLabel2", "optionsLabel3", "optionsLabel4", "optionsLabel5", "optionsLabel6",
 	"optionsLabel7", "optionsLabel8", "optionsLabel9", "optionsLabel10"];
 hideOrExposeOptions = function()
 {
 	// currently hidden, so switch to visible
-	if(document.getElementById(options_element_ids[0]).style.visibility == "hidden")
+	if(document.getElementById(optionsElementIDs[0]).style.visibility == "hidden")
 	{
-		for(var i = 0; i < options_element_ids.length; i++)
+		for(var i = 0; i < optionsElementIDs.length; i++)
 		{
-			document.getElementById(options_element_ids[i]).style.visibility = "visible";
+			document.getElementById(optionsElementIDs[i]).style.visibility = "visible";
 		}
 		document.getElementById("advancedOptionsLabel").innerHTML = "&#9660;&nbsp;&nbsp;<u>Advanced options:</u>";
 	}
@@ -126,9 +126,9 @@ hideOrExposeOptions = function()
 	// currently visible, so switch to hidden
 	else
 	{
-		for(var i = 0; i < options_element_ids.length; i++)
+		for(var i = 0; i < optionsElementIDs.length; i++)
 		{
-			document.getElementById(options_element_ids[i]).style.visibility = "hidden";
+			document.getElementById(optionsElementIDs[i]).style.visibility = "hidden";
 		}
 		document.getElementById("advancedOptionsLabel").innerHTML = "<span class=\"spooky\">&#9650;&nbsp;&nbsp;<u>Advanced options:</u></span>";
 	}

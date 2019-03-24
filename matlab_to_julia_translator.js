@@ -2,79 +2,79 @@ translate = function(input)
 {
 	// SAVES USER-INPUTTED FUNCTION NAMES
 	var functions = {};
-	var split_regex = /\s*[,\s]\s*/;
-	var function_names_input = document.getElementById("functionNamesField").value;
-	if(function_names_input != default_function_names_field_value)
+	var splitRegex = /\s*[,\s]\s*/;
+	var functionNamesInput = document.getElementById("functionNamesField").value;
+	if(functionNamesInput != defaultFunctionNamesFieldValue)
 	{
-		var split_function_names_input = function_names_input.split(split_regex);
-		for(var i = 0; i < split_function_names_input.length; i++)
+		var splitFunctionNamesInput = functionNamesInput.split(splitRegex);
+		for(var i = 0; i < splitFunctionNamesInput.length; i++)
 		{
-			var function_name = split_function_names_input[i];
-			if(function_name.length > 0)
+			var functionName = splitFunctionNamesInput[i];
+			if(functionName.length > 0)
 			{
-				functions[function_name] = -1;
+				functions[functionName] = -1;
 			}
 		}
 	}
 	
 	// SAVES USER-INPUTTED VALUES NOT TO BE INTERPRETED AS FUNCTIONS
 	var matrixes = {};
-	var non_function_names_input = document.getElementById("notFunctionNamesField").value;
-	if(non_function_names_input != default_not_function_names_field_value)
+	var nonFunctionNamesInput = document.getElementById("notFunctionNamesField").value;
+	if(nonFunctionNamesInput != defaultNotFunctionNamesFieldValue)
 	{
-		var split_non_function_names_input = non_function_names_input.split(split_regex);
-		for(var i = 0; i < split_non_function_names_input.length; i++)
+		var splitNonFunctionNamesInput = nonFunctionNamesInput.split(splitRegex);
+		for(var i = 0; i < splitNonFunctionNamesInput.length; i++)
 		{
-			var non_function_name = split_non_function_names_input[i];
-			if(non_function_name.length > 0 && !(non_function_name in functions))
+			var nonFunctionName = splitNonFunctionNamesInput[i];
+			if(nonFunctionName.length > 0 && !(nonFunctionName in functions))
 			{
-				matrixes[non_function_name] = -1;
+				matrixes[nonFunctionName] = -1;
 			}
 		}
 	}
 	
 	// SAVES NAMES OF KNOWN FUNCTIONS
-	for(var i = 0; i < known_functions.length; i++)
+	for(var i = 0; i < knownFunctions.length; i++)
 	{
-		var known_function = known_functions[i];
-		if(!(known_function in matrixes))
+		var knownFunction = knownFunctions[i];
+		if(!(knownFunction in matrixes))
 		{
-			functions[known_function] = -1;
+			functions[knownFunction] = -1;
 		}
 	}
-	for(var i = 0; i < more_known_functions.length; i++)
+	for(var i = 0; i < moreKnownFunctions.length; i++)
 	{
-		var known_function = more_known_functions[i];
-		if(!(known_function in matrixes))
+		var knownFunction = moreKnownFunctions[i];
+		if(!(knownFunction in matrixes))
 		{
-			functions[known_function] = -1;
+			functions[knownFunction] = -1;
 		}
 	}
 	
 	// SAVES NAMES OF KNOWN NOT-FUNCTIONS
-	for(var i = 0; i < known_non_functions.length; i++)
+	for(var i = 0; i < knownNonFunctions.length; i++)
 	{
-		var known_non_function = known_non_functions[i];
-		if(!(known_non_function in functions))
+		var knownNonFunction = knownNonFunctions[i];
+		if(!(knownNonFunction in functions))
 		{
-			matrixes[known_non_function] = -1;
+			matrixes[knownNonFunction] = -1;
 		}
 	}
 	
 	// SAVES NAMES OF PROBABLE FUNCTIONS
-	//        function_name = @(anything)
-	//        function [anything] = function_name(anything)
+	//        functionName = @(anything)
+	//        function [anything] = functionName(anything)
 	
 	// object = @(anything)
 	var regex = /([^\s]*)(\s*=)\s*@\s*\((.*)\)/g;
 	var match;
 	while(match = regex.exec(input))
 	{
-		var function_name = match[1];
-		var function_location = match.index;
-		if(!(function_name in matrixes))
+		var functionName = match[1];
+		var functionLocation = match.index;
+		if(!(functionName in matrixes))
 		{
-			functions[function_name] = function_location;
+			functions[functionName] = functionLocation;
 		}
 	}
 	// function [anything] = object(anything)
@@ -82,97 +82,97 @@ translate = function(input)
 	var match;
 	while(match = regex.exec(input))
 	{
-		var function_name = match[4];
-		var function_location = indexOfGroup(match, 4);
-		if(!(function_name in matrixes))
+		var functionName = match[4];
+		var functionLocation = indexOfGroup(match, 4);
+		if(!(functionName in matrixes))
 		{
-			functions[function_name] = function_location;
+			functions[functionName] = functionLocation;
 		}
 	}
 	
 	// SAVES NAMES OF PROBABLE MATRICES
-	//        matrix_name = load anything
-	//        matrix_name = load(anything)
-	//        matrix_name = function_name
-	//        matrix_name = function_name(anything)
-	//        matrix_name = other_matrix_name(anything)
-	//        matrix_name = other_matrix_name
-	//        matrix_name = something not defined
+	//        matrixName = load anything
+	//        matrixName = load(anything)
+	//        matrixName = functionName
+	//        matrixName = functionName(anything)
+	//        matrixName = otherMatrixName(anything)
+	//        matrixName = otherMatrixName
+	//        matrixName = something not defined
 
-	// matrix_name = load anything
+	// matrixName = load anything
 	var regex = /(\w+)\s*=\s*load\s+\w+/g;
 	var match;
 	while(match = regex.exec(input))
 	{
-		var matrix_name = match[1];
-		var matrix_location = match.index;
-		if(!(matrix_name in functions))
+		var matrixName = match[1];
+		var matrixLocation = match.index;
+		if(!(matrixName in functions))
 		{
-			matrixes[matrix_name] = matrix_location;
+			matrixes[matrixName] = matrixLocation;
 		}
 	}
-	// matrix_name = load(anything)
+	// matrixName = load(anything)
 	var regex = /(\w+)\s*=\s*load\s*\(\w+\)/g;
 	var match;
 	while(match = regex.exec(input))
 	{
-		var matrix_name = match[1];
-		var matrix_location = match.index;
-		if(!(matrix_name in functions))
+		var matrixName = match[1];
+		var matrixLocation = match.index;
+		if(!(matrixName in functions))
 		{
-			matrixes[matrix_name] = matrix_location;
+			matrixes[matrixName] = matrixLocation;
 		}
 	}
-	// matrix_name = function_name(anything)
-	// matrix_name = other_matrix_name(anything)
+	// matrixName = functionName(anything)
+	// matrixName = otherMatrixName(anything)
 	var regex = /(\w+)\s*=\s*(\w+)\s*\(.*\)/g;
 	var match;
 	while(match = regex.exec(input))
 	{
-		var matrix_name = match[1];
-		var matrix_location = match.index;
-		var other_name = match[2];
-		if(other_name in functions || other_name in matrixes)
+		var matrixName = match[1];
+		var matrixLocation = match.index;
+		var otherName = match[2];
+		if(otherName in functions || otherName in matrixes)
 		{
-			if(!(matrix_name in functions))
+			if(!(matrixName in functions))
 			{
-				matrixes[matrix_name] = matrix_location;
+				matrixes[matrixName] = matrixLocation;
 			}
 		}
 	}
-	// matrix_name = function_name
-	// matrix_name = something not defined
-	// matrix_name = other_matrix_name
+	// matrixName = functionName
+	// matrixName = something not defined
+	// matrixName = otherMatrixName
 	var regex = /(\w+)\s*=\s*(\w+)/g;
 	var match;
 	while(match = regex.exec(input))
 	{
-		var matrix_name = match[1];
-		var matrix_location = match.index;
-		var other_name = match[2];
-		if(!(matrix_name in functions))
+		var matrixName = match[1];
+		var matrixLocation = match.index;
+		var otherName = match[2];
+		if(!(matrixName in functions))
 		{
-			matrixes[matrix_name] = matrix_location;
+			matrixes[matrixName] = matrixLocation;
 		}
 	}
 	
 	// BLOCK COMMENTS
 	//     add # to the start of every line between %{ and }%,
 	//     delete %{ and }%
-	var split_contents = input.split("\n");
+	var splitContents = input.split("\n");
 	var contents = "";
-	var in_block_comment = false;
- 	for(var i = 0; i < split_contents.length; i++)
+	var inBlockComment = false;
+ 	for(var i = 0; i < splitContents.length; i++)
  	{
- 		var line = split_contents[i];
- 		if(in_block_comment == true)
+ 		var line = splitContents[i];
+ 		if(inBlockComment == true)
  		{
  			line = "#" + line;
  		}
  		
 		if(/%{/.test(line))
  		{
- 			in_block_comment = true;
+ 			inBlockComment = true;
  			line = line.replace(/%{/g, "#");
  		}
 		
@@ -188,7 +188,7 @@ translate = function(input)
 			{
 				line = line.replace(/%}/g, "");
 			}
-			in_block_comment = false;
+			inBlockComment = false;
 		}
 		contents = contents + line + "\n";
  	}
@@ -292,7 +292,7 @@ translate = function(input)
 
 	// FUNCTIONS
 	//     MATLAB:                                  |  Julia:
-	//         function [a b] = sum_product(x, y)   |     function sum_product(x,y)
+	//         function [a b] = sumProduct(x, y)   |     function sumProduct(x,y)
 	//            a = x + y;                        |         a = x + y;
 	//            if a > 5                          |            if a > 5
 	//                a = 0                         |                a = 0
@@ -303,141 +303,141 @@ translate = function(input)
 	if(/function\s*?\[(.*?)\]\s*?=\s*(.*?)\s*?\((.*?)\)\n*(\s*)((\n*.*)*)/.test(contents))
 	{
 		// locates all end keywords
-		var end_locations = [];
+		var endLocations = [];
 		var regex = /(\wend\w)|(end\w)|(\wend)|(end)/g;
 		var match;
 		while(match = regex.exec(contents))
 		{
 			if(match[4] != null && match[4].length > 0)
 			{
-				end_locations.push(match.index);
+				endLocations.push(match.index);
 			}
 		}
 	
 		// locates all if, for, while, and function statements
-		var loop_locations = [];
+		var loopLocations = [];
 		var regex = /(\w(if|while|function|for)\w)|((if|while|function|for)\w)|(\w(if|while|function|for))|(if|while|function|for)/g;
 		var match;
 		while(match = regex.exec(contents))
 		{
   			if(match[7] != null && match[7].length > 0)
 			{
-				loop_locations.push(match.index);
+				loopLocations.push(match.index);
 			}
 		}
 	
 		// adds extra end statement if necessary
-		if(end_locations.length < loop_locations.length)
+		if(endLocations.length < loopLocations.length)
 		{
 			var addition = "end\n";
 			contents = contents + addition;
-			end_locations.push(contents.length - addition.length);
+			endLocations.push(contents.length - addition.length);
 		}
 	
 		// only proceeds if there are as many end statements as starts of for, if, or while loops or functions
-		if(end_locations.length == loop_locations.length)
+		if(endLocations.length == loopLocations.length)
 		{
 			// finds places to add function return statements
-			var return_statements = [];
-			var return_locations = [];
+			var returnStatements = [];
+			var returnLocations = [];
 			var regex = /(function)\s*?\[(.*?)\]\s*?=\s*(.*?)\s*?\((.*?)\)\n*?(\s*)((\n*?.*?)*?)/g;
 			var match;
 			while(match = regex.exec(contents))
 			{
 				var location = match.index;
-				var return_statement = match[2];
+				var returnStatement = match[2];
 				var whitespace = match[5];
 				whitespace = whitespace.replace(/\n/g, "");
 		
 				// progresses indexes to next after (and including) function start
-				var loop_index = 0;
-				var end_index = 0;
-				while(loop_index < loop_locations.length && loop_locations[loop_index] <= location)
+				var loopIndex = 0;
+				var endIndex = 0;
+				while(loopIndex < loopLocations.length && loopLocations[loopIndex] <= location)
 				{
-					loop_index = loop_index + 1;
+					loopIndex = loopIndex + 1;
 				}
-				while(end_index < end_locations.length && end_locations[end_index] <= location)
+				while(endIndex < endLocations.length && endLocations[endIndex] <= location)
 				{
-					end_index = end_index + 1;
+					endIndex = endIndex + 1;
 				}
 			
 				// matches end statements with loops or functions
 				var depth = 1;
-				while(depth > 0 && end_index <= end_locations.length)
+				while(depth > 0 && endIndex <= endLocations.length)
 				{
 					// next closest item is an end
-					if(loop_index >= end_locations.length || end_locations[end_index] < loop_locations[loop_index])
+					if(loopIndex >= endLocations.length || endLocations[endIndex] < loopLocations[loopIndex])
 					{
-						end_index = end_index + 1;
+						endIndex = endIndex + 1;
 						depth = depth - 1;
 					}
 				
 					// next item is the start of a loop or a function
 					else
 					{
-						loop_index = loop_index + 1;
+						loopIndex = loopIndex + 1;
 						depth = depth + 1;
 					}
 				}
 			
  				// saves return statement (with end statements added if necessary) and location to add it to
- 				var return_location = end_locations[end_index - 1] - 1;
+ 				var returnLocation = endLocations[endIndex - 1] - 1;
  				whitespace = whitespace.replace(/^\n(\s*)/g, "$1");
  				whitespace = whitespace.replace(/(\s*)\n$/g, "$1");
-				var return_statement = whitespace + "\[" + return_statement + "\]";
-				if(!(/\s/.test(contents.substring(return_location - 1, 1))))
+				var returnStatement = whitespace + "\[" + returnStatement + "\]";
+				if(!(/\s/.test(contents.substring(returnLocation - 1, 1))))
 				{
-					return_statement = "\n" + return_statement;
+					returnStatement = "\n" + returnStatement;
 				}
-				if(!(/\n/g.test(contents.substring(return_location, 1))))
+				if(!(/\n/g.test(contents.substring(returnLocation, 1))))
 				{
-					return_statement = return_statement + "\n";
+					returnStatement = returnStatement + "\n";
 				}
 			
-				return_statements.push(return_statement);
-				return_locations.push(return_location);
+				returnStatements.push(returnStatement);
+				returnLocations.push(returnLocation);
 			}
 		
 			// sorts return statements by location (largest first)
-			var sorted_return_statements = [];
-			var sorted_return_locations = [];
-			for(var index = 0; index < return_statements.length; index++)
+			var sortedReturnStatements = [];
+			var sortedReturnLocations = [];
+			for(var index = 0; index < returnStatements.length; index++)
 			{
-				var max_index = 0;
-				for(var indexj = 1; indexj < return_locations.length; indexj++)
+				var maxIndex = 0;
+				for(var indexj = 1; indexj < returnLocations.length; indexj++)
 				{
-					if(return_locations[indexj] > return_locations[max_index])
+					if(returnLocations[indexj] > returnLocations[maxIndex])
 					{
-						max_index = indexj;
+						maxIndex = indexj;
 					}
 				}
 			
-				sorted_return_statements[index] = return_statements[max_index];
-				sorted_return_locations[index] = return_locations[max_index];
+				sortedReturnStatements[index] = returnStatements[maxIndex];
+				sortedReturnLocations[index] = returnLocations[maxIndex];
 			
-				return_locations[max_index] = -1;
+				returnLocations[maxIndex] = -1;
 			}
-			return_statements = sorted_return_statements;
-			return_locations = sorted_return_locations;
+			returnStatements = sortedReturnStatements;
+			returnLocations = sortedReturnLocations;
 	
 			// inserts return statements (and end statements, if necessary) in reverse order by location
-			for(var index = 0; index < return_locations.length; index++)
+			for(var index = 0; index < returnLocations.length; index++)
 			{
-				var return_statement = return_statements[index];
-				var return_location = return_locations[index];
+				var returnStatement = returnStatements[index];
+				var returnLocation = returnLocations[index];
 				
-				var contents_pt1 = contents.substring(0, return_location+1);
-				var contents_pt2 = contents.substring(return_location+1, contents.length);
+				var contentsPt1 = contents.substring(0, returnLocation+1);
+				var contentsPt2 = contents.substring(returnLocation+1, contents.length);
 				
-				if(contents_pt1.length > 0 && contents_pt1.charAt(contents_pt1.length - 1) != "\n")
+				if(contentsPt1.length > 0 && contentsPt1.charAt(contentsPt1.length - 1) != "\n")
 				{
-					return_statement = "\n"+return_statement;
+					returnStatement = "\n"+returnStatement;
 				}
-				if(contents_pt2.length > 0 && contents_pt2.charAt(0) != "\n")
+				if(contentsPt2.length > 0 && contentsPt2.charAt(0) != "\n")
 				{
-					return_statement = return_statement + "\n";
+					returnStatement = returnStatement + "\n";
 				}
-				contents = contents_pt1 + return_statement + contents_pt2;
+				contents = contentsPt1 + returnStatement + contentsPt2;
 			}
 
 			// translates function headers
@@ -447,15 +447,15 @@ translate = function(input)
 
 	// FUNCTION CALL WITHOUT PARAMETERS
 	//    f -> f()
-	for(var function_name in functions)
+	for(var functionName in functions)
  	{
-		var regex = new RegExp("([^\\w\\d_])("+function_name+")(\\s*[^\\w\\d_(=\\s])");
+		var regex = new RegExp("([^\\w\\d_])("+functionName+")(\\s*[^\\w\\d_(=\\s])");
  		while(regex.test(contents))
  		{
  			contents = contents.replace(regex, "$1$2\(\)$3");
  		}
  		
- 		var regex = new RegExp("([^\\w\\d_])("+function_name+")(\\s*\\n)");
+ 		var regex = new RegExp("([^\\w\\d_])("+functionName+")(\\s*\\n)");
  		while(regex.test(contents))
  		{
  			contents = contents.replace(regex, "$1$2\(\)$3");
@@ -473,20 +473,20 @@ translate = function(input)
 	var match;
 	while(match = regex.exec(contents))
 	{
-		var possible_matrix_name = match[3];
+		var possibleMatrixName = match[3];
 		
 		// not defined as matrix, but defined as function
-		if(!(possible_matrix_name in matrixes) && (possible_matrix_name in functions))
+		if(!(possibleMatrixName in matrixes) && (possibleMatrixName in functions))
 		{
 			// leave as is
 		}
 		// defined as matrix or matrix by default
 		else
 		{
-			var inner_regex = new RegExp("([^\\w\\d_])(min|max)(\\s*[(]\\s*" + possible_matrix_name + "\\s*[)]\\s*)");
-			while(inner_regex.test(contents))
+			var innerRegex = new RegExp("([^\\w\\d_])(min|max)(\\s*[(]\\s*" + possibleMatrixName + "\\s*[)]\\s*)");
+			while(innerRegex.test(contents))
 			{
- 				contents = contents.replace(inner_regex, "$1$2imum$3");
+ 				contents = contents.replace(innerRegex, "$1$2imum$3");
  			}
 		}
 	}
@@ -499,26 +499,26 @@ translate = function(input)
 	var match;
 	while(match = regex.exec(contents))
 	{
-		var possible_matrix_name = match[1];
-		var possible_matrix_name_end = match.index + possible_matrix_name.length;
+		var possibleMatrixName = match[1];
+		var possibleMatrixNameEnd = match.index + possibleMatrixName.length;
 	
 		// not defined as matrix, but defined as function
-		if(!(possible_matrix_name in matrixes) && (possible_matrix_name in functions))
+		if(!(possibleMatrixName in matrixes) && (possibleMatrixName in functions))
 		{
 			// leave as is
 			
 			// look again right after the function name, just in case there's more inside
 			// the function call
-			regex.lastIndex = possible_matrix_name_end+1;
+			regex.lastIndex = possibleMatrixNameEnd+1;
 		}
 		// defined as matrix or matrix by default
 		else
 		{
 			// matrix indexing (one level of parentheses--no parentheses inside the parentheses)
-			var inner_regex = new RegExp("([^\\w\\d_])(" + possible_matrix_name + "\\s*)[(]([^()]*)[)]");
-			while(inner_regex.test(contents))
+			var innerRegex = new RegExp("([^\\w\\d_])(" + possibleMatrixName + "\\s*)[(]([^()]*)[)]");
+			while(innerRegex.test(contents))
 			{
- 				contents = contents.replace(inner_regex, "$1$2\[$3\]");
+ 				contents = contents.replace(innerRegex, "$1$2\[$3\]");
  				
  				// forces detection to start over so we don't miss nested parentheses
  				regex.lastIndex = 0;
@@ -528,36 +528,36 @@ translate = function(input)
  			var o = "[^()]*";
  			var p1 = "[(]";
  			var p2 = "[)]";
-			var inner_regex = new RegExp("([^\\w\\d_])(" + possible_matrix_name + "\\s*)" + p1+"(("+o+p1+o+p2+o+")+)"+p2);
-			while(inner_regex.test(contents))
+			var innerRegex = new RegExp("([^\\w\\d_])(" + possibleMatrixName + "\\s*)" + p1+"(("+o+p1+o+p2+o+")+)"+p2);
+			while(innerRegex.test(contents))
 			{
- 				contents = contents.replace(inner_regex, "$1$2\[$3\]");
+ 				contents = contents.replace(innerRegex, "$1$2\[$3\]");
  				
  				// forces detection to start over so we don't miss nested parentheses
  				regex.lastIndex = 0;
  			}
  			
  			// more than two levels of parentheses
- 			var inner_regex = new RegExp("([^\\w\\d_]" + possible_matrix_name + "\\s*[(])");
+ 			var innerRegex = new RegExp("([^\\w\\d_]" + possibleMatrixName + "\\s*[(])");
  			var match;
-  			if(match = inner_regex.exec(contents))
+  			if(match = innerRegex.exec(contents))
  			{
- 				var index_after_opening_paren = match.index + match[0].length;
- 				var index_of_opening_paren = index_after_opening_paren - 1;
- 				var paren_depth = 0;
- 				for(var i = index_after_opening_paren; i < contents.length && paren_depth > -1; i++)
+ 				var indexAfterOpeningParen = match.index + match[0].length;
+ 				var indexOfOpeningParen = indexAfterOpeningParen - 1;
+ 				var parenDepth = 0;
+ 				for(var i = indexAfterOpeningParen; i < contents.length && parenDepth > -1; i++)
  				{
  					if(contents.charAt(i) == '(')
  					{
- 						paren_depth++;
+ 						parenDepth++;
  					}
  					if(contents.charAt(i) == ')')
  					{
- 						paren_depth--;
- 						if(paren_depth == -1)
+ 						parenDepth--;
+ 						if(parenDepth == -1)
  						{
  							contents = contents.substring(0, i) + "]" + contents.substring(i+1, contents.length);
- 							contents = contents.substring(0, index_of_opening_paren) + "[" + contents.substring(index_of_opening_paren+1, contents.length);
+ 							contents = contents.substring(0, indexOfOpeningParen) + "[" + contents.substring(indexOfOpeningParen+1, contents.length);
  						}
  					}
  				}
@@ -616,7 +616,7 @@ indexOfGroup = function(match, n)
 
 // KNOWN MATLAB FUNCTIONS
 // from http://www.ece.northwestern.edu/local-apps/matlabhelp/techdoc/ref/refbookl.html
-var known_functions = ["abs", "acos", "acosh", "acot", "acoth", "acsc", "acsch",
+var knownFunctions = ["abs", "acos", "acosh", "acot", "acoth", "acsc", "acsch",
 	"actxcontrol", "actxserver", "addframe", "addpath", "addproperty", "airy", "alim", "all",
 	"allchild", "alpha", "alphamap", "angle", "ans", "any", "area", "asec", "asech", "asin",
 	"asinh", "assignin", "atan", "atan2", "atanh", "audiodevinfo", "audioplayer",
@@ -660,7 +660,7 @@ var known_functions = ["abs", "acos", "acosh", "acot", "acoth", "acsc", "acsch",
 	"flow", "fmin", "fminbnd", "fmins", "fminsearch", "fopen", "fopen", "format",
 	"fplot", "fprintf", "fprintf", "frame2im", "frameedit", "fread", "fread", "freeserial",
 	"freqspace", "frewind", "fscanf", "fscanf", "fseek", "ftell", "full", "fullfile",
-	"func2str", "function", "function_handle", "functions", "funm", "fwrite", "fwrite",
+	"func2str", "function", "functionHandle", "functions", "funm", "fwrite", "fwrite",
 	"fzero", "gallery", "gamma", "gammainc", "gammaln", "gca", "gcbf", "gcbo", "gcd", "gcf",
 	"gco", "genpath", "get", "getappdata", "getenv", "getfield",
 	"getframe", "ginput", "global", "gmres", "gplot", "gradient", "graymon", "grid",
@@ -741,6 +741,6 @@ var known_functions = ["abs", "acos", "acosh", "acot", "acoth", "acsc", "acsch",
 	"workspace", "xlabel", "ylabel", "zlabel", "xlim", "ylim", "zlim", "xlsfinfo", "xlsread",
 	"xmlread", "xmlwrite", "xor", "xslt", "zeros", "zip", "zoom"];
 
-var more_known_functions = ["println", "cummax", "cummin", "diagm", "hcat", "vcat", "maximum", "minimum"];
+var moreKnownFunctions = ["println", "cummax", "cummin", "diagm", "hcat", "vcat", "maximum", "minimum"];
 
-var known_non_functions = ["false", "pi", "true"];
+var knownNonFunctions = ["false", "pi", "true"];
