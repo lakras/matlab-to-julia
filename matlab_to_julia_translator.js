@@ -222,11 +222,17 @@ translate = function(input)
 
 	// DIAGONAL MATRIX
 	//		diag([1 2 3]) -> Diagonal([1, 2, 3])
-	while(/([^\w\d_])(diag\(\s*\[.*[^,])(\s[^,]\s*.*]\s*\))/.test(contents))
+	// DIAGONALS OF MATRIX
+	//		      diag(A) -> diag(A)
+	while(/([^\w\d_])(diag\(\s*\[.*[^,])(\s[^,]\s*.*\]\s*\))/.test(contents))
 	{
-		contents = contents.replace(/([^\w\d_])(diag\(\s*\[.*[^,])(\s[^,]\s*.*]\s*\))/g, "$1$2,$3");
+		contents = contents.replace(/([^\w\d_])(diag\(\s*\[.*[^,])(\s[^,]\s*.*\]\s*\))/g, "$1$2,$3");
 	}
-	contents = contents.replace(/([^\w\d_])diag(\s*\(.+?\))/g, "$1Diagonal$2");
+	contents = contents.replace(/([^\w\d_])diag(\(\s*\[.+?\]\s*\))/g, "$1Diagonal$2");
+	
+	// ROW REMOVAL
+	//    A([1 2 4], :) -> A[[1, 2, 4], :]
+	
 	
 	// CONCATENATION
 	//		horzcat([1 2], [1 2]) -> hcat([1 2], [1 2])
@@ -255,7 +261,15 @@ translate = function(input)
 	contents = contents.replace(/([^\w\d_])(sum\s*\(\s*\w+)\s*\(\s*:\s*\)(\s*\))/g, "$1$2$3");
 	contents = contents.replace(/([^\w\d_])max(\s*\(\s*\w+)\s*\(\s*:\s*\)(\s*\))/g, "$1maximum$2$3");
 	contents = contents.replace(/([^\w\d_])min(\s*\(\s*\w+)\s*\(\s*:\s*\)(\s*\))/g, "$1minimum$2$3");
-
+	
+	// GET DIMENSIONS OF A MATRIX
+	//      [nrow ncol] = size(A) -> nrow, ncol = size(A)
+	contents = contents.replace(/\[\s*(.+?)(\s+.+?)\s*\](\s*=\s*size\s*\(.+?\))/g, "$1,$2$3");
+	
+	// EIGENVALUES AND EIGENVECTORS
+	//     [vec, val] = eig(A) -> val, vec = eigen(A)
+	contents = contents.replace(/\[\s*(.+?)(,\s*)(.+?)\s*\](\s*=\s*eig)(\s*\(.+?\))/g, "$3$2$1$4en$5");
+	
 	// FORMATTED PRINTING
 	//     MATLAB:
 	//         fprintf('My age is %d and my salary is %.2f\n', age, salary)
@@ -612,6 +626,15 @@ translate = function(input)
 	contents = contents.replace(/([^\w\d_])(\(.+?\))\s*[.]'/g, "$1transpose$2");
 	contents = contents.replace(/([^\w\d_])(\w+)\s*[.]'/g, "$1transpose($2)");
 	
+	// ROW REMOVAL
+	//    A([1 2 4], :) -> A[[1, 2, 4], :]
+	// note that this replacement is AFTER () -> [], so in practice this is
+	//    A[[1 2 4], :] -> A[[1, 2, 4], :]
+	while(/([^\w\d_])(.*\[\s*\[.*[^,])(\s[^,]\s*.*\]\s*,\s*:\])/.test(contents))
+	{
+		contents = contents.replace(/([^\w\d_])(.*\[\s*\[.*[^,])(\s[^,]\s*.*\]\s*,\s*:\])/g, "$1$2,$3");
+	}
+	
 	// removes newline artificially added to start and end
  	contents = contents.substring(1, contents.length - 1);
 	
@@ -764,7 +787,7 @@ var knownFunctions = ["abs", "acos", "acosh", "acot", "acoth", "acsc", "acsch",
 	"xmlread", "xmlwrite", "xor", "xslt", "zeros", "zip", "zoom"];
 
 var moreKnownFunctions = ["println", "cummax", "cummin", "diagm", "hcat", "vcat", "maximum",
-	"minimum", "Diagonal", "reverse"];
+	"minimum", "Diagonal", "reverse", "eigen"];
 
 var knownNonFunctions = ["false", "pi", "true"];
 

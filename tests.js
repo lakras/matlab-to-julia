@@ -202,20 +202,20 @@ matlab = "A(:, 1:4)";
 julia  = "A[:, 1:4]";
 assert(julia === translator.translate(matlab));
 
-// TODO: Remove a row
+// Remove a row
 matlab = "A([1 2 4], :)";
 julia  = "A[[1, 2, 4], :]";
-// assert(julia === translator.translate(matlab));
+assert(julia === translator.translate(matlab));
 
-// TODO: Diagonals of matrix
+// Diagonals of matrix
 matlab = "diag(A)";
 julia  = "diag(A)";
-// assert(julia === translator.translate(matlab));
+assert(julia === translator.translate(matlab));
 
-// TODO: Get dimensions of matrix
+// Get dimensions of matrix
 matlab = "[nrow ncol] = size(A)";
 julia  = "nrow, ncol = size(A)";
-// assert(julia === translator.translate(matlab));
+assert(julia === translator.translate(matlab));
 
 // Dot product
 matlab = "dot(A, B)";
@@ -256,10 +256,10 @@ matlab = "det(A)";
 julia  = "det(A)";
 assert(julia === translator.translate(matlab));
 
-// TODO: Eigenvalues and eigenvectors
+// Eigenvalues and eigenvectors
 matlab = "[vec, val] = eig(A)";
 julia  = "val, vec = eigen(A)";
-// assert(julia === translator.translate(matlab));
+assert(julia === translator.translate(matlab));
 
 // Euclidean norm
 matlab = "norm(A)";
