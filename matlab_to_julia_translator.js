@@ -167,46 +167,24 @@ translate = function(input)
 		}
 	}
 	
-	// BLOCK COMMENTS
-	//     add # to the start of every line between %{ and }%,
-	//     delete %{ and }%
+	// retrieves input
+	// extra newline added to end so we don't have to deal with end of string
 	var splitContents = input.split("\n");
 	var contents = "";
-	var inBlockComment = false;
  	for(var i = 0; i < splitContents.length; i++)
  	{
  		var line = splitContents[i];
- 		if(inBlockComment == true)
- 		{
- 			line = "#" + line;
- 		}
- 		
-		if(/%{/.test(line))
- 		{
- 			inBlockComment = true;
- 			line = line.replace(/%{/g, "#");
- 		}
-		
-		var regex = /.*%}(.*)/;
-		var match;
-		if(match = regex.exec(line))
-		{
-			if(match[1].length > 0)
-			{
-				line = line.replace(/%}\s*/g, "\n");
-			}
-			else
-			{
-				line = line.replace(/%}/g, "");
-			}
-			inBlockComment = false;
-		}
 		contents = contents + line + "\n";
  	}
- 	// extra newline added to end so we don't have to deal with end of string
  	
  	// adds newline to start so we don't have to deal with start of string
  	contents = "\n" + contents;
+ 	
+ 	// BLOCK COMMENTS
+	//     replace all instances of %{ with #=
+	//     replace all instances of %} with =#
+	contents = contents.replace(/%{/g, "#=");
+	contents = contents.replace(/%}/g, "=#");
  	 	
  	// COMMENTS
 	//     replace all instances of % with #

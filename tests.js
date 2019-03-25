@@ -352,14 +352,14 @@ matlab = "% This is a comment";
 julia  = "# This is a comment";
 assert(julia === translator.translate(matlab));
 
-// TODO: Comment block
+// Comment block
 matlab = "%{"
 	+ "Comment block"
 	+ "%}";
 julia  = "#="
 	+ "Comment block"
 	+ "=#";
-// assert(julia === translator.translate(matlab));
+assert(julia === translator.translate(matlab));
 
 // For loop
 matlab = "for i = 1:N"
