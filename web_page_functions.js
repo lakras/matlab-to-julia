@@ -143,11 +143,11 @@ hideOrExposeOptions = function()
 }
 
 var demoCode =
-		"what %{hi\n" +
-		"bla bla bla\n" +
-		"bla%}h = @(x, y) x * y\n" +
+		"A = B + C %{block\n" +
+		"comment\n" +
+		"blocky comment%} h = @(x, y) x * y\n" +
 		"\n" +
-		"%hello\n" +
+		"%a comment\n" +
 		"\n" +
 		"h = @(x, y) x * y\n" +
 		"h=@(x,y)x*y\n" +
@@ -156,7 +156,7 @@ var demoCode =
 		"\n" +
 		"%{\n" +
 		"    comments here\n" +
-		"    and here\n" +
+		"    more comments here\n" +
 		"%}\n" +
 		"\n" +
 		"mod(5,3)\n" +
@@ -165,7 +165,7 @@ var demoCode =
 		"h = @ (x, y) mod (x, y)\n" +
 		"h=@(x, y)mod(x,y)\n" +
 		"\n" +
-		"fprintf('My age is %d and my salary is %.2f\\n', age, salary)\n" +
+		"fprintf('My age is %d and my decimal is %.2f\\n', age, decimal)\n" +
 		"sqrt(-1)\n" +
 		"bitxor(a + b, c + d)\n" +
 		"bitand(a + b, c + d)\n" +
