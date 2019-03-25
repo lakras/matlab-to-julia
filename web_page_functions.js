@@ -4,6 +4,12 @@ runTranslator = function()
 	// retrieves MATLAB code from input field
 	var input = document.getElementById("inputField").value;
 	
+	// retrieves advanced options input
+	functionNamesInput = document.getElementById("functionNamesField").value;
+	nonFunctionNamesInput = document.getElementById("notFunctionNamesField").value;
+	removeSemicolons = document.getElementById("removeSemicolonsCheckbox").checked;
+	nonanonymousOneLiners = document.getElementById("nonanonymousOneLinersButton").checked;
+	
 	// kills translation if it hasn't finished in 3 seconds
 	timeoutTimer = setTimeout(respondToTimeout, 3000);
 	
@@ -91,8 +97,6 @@ enableTranslateButton = function()
 	document.getElementById("translateButton").disabled=false;
 }
 
-var defaultFunctionNamesFieldValue = "functionName1, functionName2, etc.";
-var defaultNotFunctionNamesFieldValue = "matrixName, variableName, etc.";
 clearFunctionNamesField = function()
 {
 	if(document.getElementById("functionNamesField").value == defaultFunctionNamesFieldValue)

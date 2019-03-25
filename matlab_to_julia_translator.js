@@ -1,9 +1,17 @@
+// retrieves advanced options input
+var functionNamesInput = "";
+var nonFunctionNamesInput = "";
+var removeSemicolons = false;
+var nonanonymousOneLiners = false;
+
+var defaultFunctionNamesFieldValue = "functionName1, functionName2, etc.";
+var defaultNotFunctionNamesFieldValue = "matrixName, variableName, etc.";
+
 translate = function(input)
 {
 	// SAVES USER-INPUTTED FUNCTION NAMES
 	var functions = {};
 	var splitRegex = /\s*[,\s]\s*/;
-	var functionNamesInput = document.getElementById("functionNamesField").value;
 	if(functionNamesInput != defaultFunctionNamesFieldValue)
 	{
 		var splitFunctionNamesInput = functionNamesInput.split(splitRegex);
@@ -19,7 +27,6 @@ translate = function(input)
 	
 	// SAVES USER-INPUTTED VALUES NOT TO BE INTERPRETED AS FUNCTIONS
 	var matrixes = {};
-	var nonFunctionNamesInput = document.getElementById("notFunctionNamesField").value;
 	if(nonFunctionNamesInput != defaultNotFunctionNamesFieldValue)
 	{
 		var splitNonFunctionNamesInput = nonFunctionNamesInput.split(splitRegex);
@@ -203,7 +210,7 @@ translate = function(input)
 	
 	// SEMICOLONS
 	//      Julia does not need semicolons at the ends of statements
-	if(document.getElementById("removeSemicolonsCheckbox").checked == true)
+	if(removeSemicolons)
 	{
 		contents = contents.replace(/;(\n+)/g, "$1");	// removes semicolons at the ends of lines
 	}
@@ -278,8 +285,8 @@ translate = function(input)
 
 	// ANONYMOUS FUNCTIONS
 	//     h = @(x, y) x * y  ->  h(x, y) = x * y
-	//     h = @(x, y) x * y  ->  h = (x, y) -> x*y 
-	if(document.getElementById("nonanonymousOneLinersButton").checked == true)
+	//     h = @(x, y) x * y  ->  h = (x, y) -> x*y
+	if(nonanonymousOneLiners)
 	{
 		// translate to h(x, y) = x * y
 		contents = contents.replace(/([^\s]*)(\s*=)\s*@\s*\(([^()]*)\)/g, "$1\($3\)$2");
@@ -599,7 +606,7 @@ translate = function(input)
 	}
 	
 	return contents;
-};
+}
 
 // from first answer in:
 // 		http://stackoverflow.com/questions/1985594/how-to-find-indices-of-groups-in-javascript-regular-expressions-match
@@ -612,7 +619,6 @@ indexOfGroup = function(match, n)
 	}
     return ix;
 }
-
 
 // KNOWN MATLAB FUNCTIONS
 // from http://www.ece.northwestern.edu/local-apps/matlabhelp/techdoc/ref/refbookl.html
@@ -744,3 +750,13 @@ var knownFunctions = ["abs", "acos", "acosh", "acot", "acoth", "acsc", "acsch",
 var moreKnownFunctions = ["println", "cummax", "cummin", "diagm", "hcat", "vcat", "maximum", "minimum"];
 
 var knownNonFunctions = ["false", "pi", "true"];
+
+
+// to allow us to run the translate function from tests.js
+module.exports =
+{
+	translate: function(input)
+	{
+		return translate(input);
+	}
+}
