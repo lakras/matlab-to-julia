@@ -78,10 +78,10 @@ matlab = "A = ones(2, 2)";
 julia  = "A = ones(2, 2)";
 assert(julia === translator.translate(matlab));
 
-// TODO: 2 x 2 identity matrix
+// 2 x 2 identity matrix
 matlab = "A = eye(2, 2)";
 julia  = "A = I";
-// assert(julia === translator.translate(matlab));
+assert(julia === translator.translate(matlab));
 
 // TODO: Diagonal matrix
 matlab = "A = diag([1 2 3])";

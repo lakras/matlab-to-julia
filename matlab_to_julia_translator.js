@@ -594,6 +594,10 @@ translate = function(input)
 	//      linspace(1, 5, k) -> range(1, 5, length = k)
 	contents = contents.replace(/([^\w\d_])linspace(\s*\(.*,\s*.*,)(\s*)(.*\))/g, "$1range$2$3length$3=$3$4");
 	
+	// IDENTITY MATRIX
+	//       eye(2, 2) -> I
+	contents = contents.replace(/([^\w\d_])eye\(.+?,.+?\)/g, "$1I");
+	
 	// removes newline artificially added to start and end
  	contents = contents.substring(1, contents.length - 1);
 	
