@@ -411,14 +411,26 @@ matlab = "f = @(x) x^2";
 julia  = "f = (x) -> x^2";
 assert(julia === translator.translate(matlab));
 
-// TODO: Function
-matlab = "function out = f(x)"
-	+ "  out = x^2"
+// Functions
+matlab = "function out = f(x)\n"
+	+ "  out = x^2\n"
 	+ "end";
-julia  = "function f(x)"
-	+ "  return x^2"
+julia  = "function f(x)\n"
+	+ "  out = x^2\n"
+	+ "  return out\n"
 	+ "end";
-// assert(julia === translator.translate(matlab));
+assert(julia === translator.translate(matlab));
+
+matlab = "function[c f] = temperature(x, y)\n"
+	+ "  f = x + y\n"
+	+ "  c = x * y\n"
+	+ "end";
+julia  = "function temperature(x, y)\n"
+	+ "  f = x + y\n"
+	+ "  c = x * y\n"
+	+ "  return [c f]\n"
+	+ "end";
+assert(julia === translator.translate(matlab));
 
 // Tuples
 matlab = "t = {1 2.0 3 4}"

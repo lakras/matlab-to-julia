@@ -89,7 +89,7 @@ translate = function(input)
 		}
 	}
 	// function [anything] = object(anything)
-	var regex = /(function\s*?\[)(.*?)(\]\s*?=\s*)(.*?)\s*?\((.*?)\)/g;
+	var regex = /(function\s*?\[?)(.*?)(\]?\s*?=\s*)(.*?)\s*?\((.*?)\)/g;
 	var match;
 	while(match = regex.exec(input))
 	{
@@ -249,12 +249,6 @@ translate = function(input)
 	contents = contents.replace(/([^\w\d_])fliplr(\s*)\((.*)\)/g, "$1reverse$2($3, dims = 2)");
 	contents = contents.replace(/([^\w\d_])flipud(\s*)\((.*)\)/g, "$1reverse$2($3, dims = 1)");
 	
-	// MAXIMUM AND MINIMUM
-	//		max(A, [], 1) -> maximum(A, 1)
-	//		max(A, [], 2) -> maximum(A, 2)
-	//		min(A, [], 1) -> minimum(A, 1)
-	//		min(A, [], 2) -> minimum(A, 2)
-	
 	// MIN, MAX OF EACH COLUMN
 	//       min(A, [], 1) -> minimum(A, dims = 1)
 	//       max(A, [], 1) -> maximum(A, dims = 1)
@@ -331,9 +325,9 @@ translate = function(input)
 	//                a = 0                         |                a = 0
 	//            end                               |            end
 	//            b = x * y;                        |         b = x * y;        
-	//         end <- optional                      |         [a b];
+	//         end <- optional                      |         return [a b]
 	//                                              |     end
-	if(/function\s*?\[(.*?)\]\s*?=\s*(.*?)\s*?\((.*?)\)\n*(\s*)((\n*.*)*)/.test(contents))
+	if(/(function)\s*(\[?.*?\]?)\s*?=\s*(.*?)\s*?\((.*?)\)\n*?(\s*)((\n*?.*?)*?)/.test(contents))
 	{
 		// locates all end keywords
 		var endLocations = [];
@@ -373,7 +367,7 @@ translate = function(input)
 			// finds places to add function return statements
 			var returnStatements = [];
 			var returnLocations = [];
-			var regex = /(function)\s*?\[(.*?)\]\s*?=\s*(.*?)\s*?\((.*?)\)\n*?(\s*)((\n*?.*?)*?)/g;
+			var regex = /(function)\s*(\[?.*?\]?)\s*?=\s*(.*?)\s*?\((.*?)\)\n*?(\s*)((\n*?.*?)*?)/g;
 			var match;
 			while(match = regex.exec(contents))
 			{
@@ -417,18 +411,22 @@ translate = function(input)
  				var returnLocation = endLocations[endIndex - 1] - 1;
  				whitespace = whitespace.replace(/^\n(\s*)/g, "$1");
  				whitespace = whitespace.replace(/(\s*)\n$/g, "$1");
-				var returnStatement = whitespace + "\[" + returnStatement + "\]";
-				if(!(/\s/.test(contents.substring(returnLocation - 1, 1))))
-				{
-					returnStatement = "\n" + returnStatement;
-				}
-				if(!(/\n/g.test(contents.substring(returnLocation, 1))))
-				{
-					returnStatement = returnStatement + "\n";
-				}
+ 				if(returnStatement.length > 0)
+ 				{
+ 					returnStatement = whitespace + "return " + returnStatement + "";
+ 					
+					if(!(/\s/.test(contents.substring(returnLocation - 1, 1))))
+					{
+						returnStatement = "\n" + returnStatement;
+					}
+					if(!(/\n/g.test(contents.substring(returnLocation, 1))))
+					{
+						returnStatement = returnStatement + "\n";
+					}
 			
-				returnStatements.push(returnStatement);
-				returnLocations.push(returnLocation);
+					returnStatements.push(returnStatement);
+					returnLocations.push(returnLocation);
+				}
 			}
 		
 			// sorts return statements by location (largest first)
@@ -452,7 +450,7 @@ translate = function(input)
 			}
 			returnStatements = sortedReturnStatements;
 			returnLocations = sortedReturnLocations;
-	
+			
 			// inserts return statements (and end statements, if necessary) in reverse order by location
 			for(var index = 0; index < returnLocations.length; index++)
 			{
@@ -464,7 +462,7 @@ translate = function(input)
 				
 				if(contentsPt1.length > 0 && contentsPt1.charAt(contentsPt1.length - 1) != "\n")
 				{
-					returnStatement = "\n"+returnStatement;
+					returnStatement = "\n" + returnStatement;
 				}
 				if(contentsPt2.length > 0 && contentsPt2.charAt(0) != "\n")
 				{
@@ -474,7 +472,7 @@ translate = function(input)
 			}
 
 			// translates function headers
-			contents = contents.replace(/(function)\s*?\[(.*?)\]\s*?=\s*(.*?)\s*?\((.*?)\)\n*?(\s*)((\n*?.*?)*?)/g, "function $3\($4\)$5$6");
+			contents = contents.replace(/(function)\s*(\[?.*?\]?)\s*?=\s*(.*?)\s*?\((.*?)\)\n*?(\s*)((\n*?.*?)*?)/g, "function $3\($4\)$5$6");
 		}
 	}
 
@@ -812,7 +810,7 @@ var knownFunctions = ["abs", "acos", "acosh", "acot", "acoth", "acsc", "acsch",
 	"realmax", "realmin", "realpow", "realsqrt", "record", "rectangle", "rectint",
 	"reducepatch", "reducevolume", "refresh", "regexp", "regexpi", "regexprep",
 	"registerevent", "rehash", "release", "rem", "repmat", "reset", "reshape", "residue",
-	"rethrow", "return", "rgb2hsv", "rgbplot", "ribbon", "rmappdata", "rmdir", "rmfield",
+	"rethrow", "rgb2hsv", "rgbplot", "ribbon", "rmappdata", "rmdir", "rmfield", // "return", 
 	"rmpath", "roots", "rose", "rosser", "rot90", "rotate", "rotate3d", "round", "rref",
 	"rsf2csf", "run", "runtime", "save", "save", "save", "saveas", "saveobj", "scatter",
 	"scatter3", "schur", "script", "sec", "sech", "selectmoveresize", "semilogx", "semilogy",
@@ -848,7 +846,7 @@ var knownFunctions = ["abs", "acos", "acosh", "acot", "acoth", "acsc", "acsch",
 var moreKnownFunctions = ["println", "cummax", "cummin", "diagm", "hcat", "vcat", "maximum",
 	"minimum", "Diagonal", "reverse", "eigen", "spzeros", "accumulate"];
 
-var knownNonFunctions = ["false", "pi", "true"];
+var knownNonFunctions = ["false", "pi", "true", "return"];
 
 
 // to allow us to run the translate function from tests.js
