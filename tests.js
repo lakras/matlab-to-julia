@@ -1,3 +1,7 @@
+// this script contains tests to be run by travis
+// (a green checkmark for a commit signifies that all tests passed)
+// tests for unimplemented Julia 1.x features commented out and marked TODO
+
 const translator = require('./matlab_to_julia_translator');
 var assert = require('assert');
 
@@ -34,7 +38,7 @@ julia  = "a | b";
 
 matlab = "a xor b";
 julia  = "a xor b"; // or ⊻
-// assert(julia === translator.translate(matlab));
+assert(julia === translator.translate(matlab));
 
 
 

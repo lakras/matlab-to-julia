@@ -1,4 +1,8 @@
-// retrieves advanced options input
+// the translator itself lives in this script, and can be used
+// independently of index.html
+
+// advanced options input (is set by web_page_functions.js if
+// changed by user; otherwise set to these defaults)
 var functionNamesInput = "";
 var nonFunctionNamesInput = "";
 var removeSemicolons = false;

@@ -1,3 +1,5 @@
+// all code that interacts with index.html lives here
+
 var timeoutTimer;
 runTranslator = function()
 {
