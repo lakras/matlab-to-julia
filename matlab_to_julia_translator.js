@@ -600,7 +600,11 @@ translate = function(input)
 	
 	// IDENTITY MATRIX
 	//       eye(2, 2) -> I
-	contents = contents.replace(/([^\w\d_])eye\(.+?,.+?\)/g, "$1I");
+	contents = contents.replace(/([^\w\d_])eye\s*\(.+?,.+?\)/g, "$1I");
+	
+	// REPEAT MATRIX FUNCTION
+	//       repmat(A, 3, 4) -> repeat(A, 3, 4)
+	contents = contents.replace(/([^\w\d_])repmat(\s*\(.+?\))/g, "$1repeat$2");
 	
 	// TRANSPOSE
 	//       A.' -> transpose(A)

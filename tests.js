@@ -157,20 +157,20 @@ matlab = "A(:)";
 julia  = "A[:]";
 assert(julia === translator.translate(matlab));
 
-// TODO: Flip left/right
+// Flip left/right
 matlab = "fliplr(A)";
 julia  = "reverse(A, dims = 2)";
 assert(julia === translator.translate(matlab));
 
-// TODO: Flip up/down
+// Flip up/down
 matlab = "flipud(A)";
 julia  = "reverse(A, dims = 1)";
 assert(julia === translator.translate(matlab));
 
-// TODO: Repeat matrix (3 times in the row dimension, 4 times in the column dimension)
+// Repeat matrix (3 times in the row dimension, 4 times in the column dimension)
 matlab = "repmat(A, 3, 4)";
 julia  = "repeat(A, 3, 4)";
-// assert(julia === translator.translate(matlab));
+assert(julia === translator.translate(matlab));
 
 // TODO: Broadcast a function over a collection/matrix/vector
 matlab = "f = @(x) x.^2\n"
