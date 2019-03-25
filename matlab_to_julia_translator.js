@@ -44,11 +44,20 @@ translate = function(input)
 		}
 	}
 	
+	// SAVES NAMES OF WORDS KNOWN TO NOT BE FUNCTIONS OR MATRIX NAMES
+	var reservedWordsDict = {};
+	for(var i = 0; i < reservedWords.length; i++)
+	{
+		var reservedWord = reservedWords[i];
+		reservedWordsDict[reservedWord] = -1;
+	}
+	
 	// SAVES NAMES OF KNOWN FUNCTIONS
 	for(var i = 0; i < knownFunctions.length; i++)
 	{
 		var knownFunction = knownFunctions[i];
-		if(!(knownFunction in matrixes))
+		if(!(knownFunction in matrixes)
+			&& !(knownFunction in reservedWordsDict))
 		{
 			functions[knownFunction] = -1;
 		}
@@ -56,19 +65,10 @@ translate = function(input)
 	for(var i = 0; i < moreKnownFunctions.length; i++)
 	{
 		var knownFunction = moreKnownFunctions[i];
-		if(!(knownFunction in matrixes))
+		if(!(knownFunction in matrixes)
+			&& !(knownFunction in reservedWordsDict))
 		{
 			functions[knownFunction] = -1;
-		}
-	}
-	
-	// SAVES NAMES OF KNOWN NOT-FUNCTIONS
-	for(var i = 0; i < knownNonFunctions.length; i++)
-	{
-		var knownNonFunction = knownNonFunctions[i];
-		if(!(knownNonFunction in functions))
-		{
-			matrixes[knownNonFunction] = -1;
 		}
 	}
 	
@@ -83,7 +83,8 @@ translate = function(input)
 	{
 		var functionName = match[1];
 		var functionLocation = match.index;
-		if(!(functionName in matrixes))
+		if(!(functionName in matrixes)
+			&& !(functionName in reservedWordsDict))
 		{
 			functions[functionName] = functionLocation;
 		}
@@ -95,7 +96,8 @@ translate = function(input)
 	{
 		var functionName = match[4];
 		var functionLocation = indexOfGroup(match, 4);
-		if(!(functionName in matrixes))
+		if(!(functionName in matrixes)
+			&& !(functionName in reservedWordsDict))
 		{
 			functions[functionName] = functionLocation;
 		}
@@ -117,7 +119,8 @@ translate = function(input)
 	{
 		var matrixName = match[1];
 		var matrixLocation = match.index;
-		if(!(matrixName in functions))
+		if(!(matrixName in functions)
+			&& !(matrixName in reservedWordsDict))
 		{
 			matrixes[matrixName] = matrixLocation;
 		}
@@ -129,7 +132,8 @@ translate = function(input)
 	{
 		var matrixName = match[1];
 		var matrixLocation = match.index;
-		if(!(matrixName in functions))
+		if(!(matrixName in functions)
+			&& !(matrixName in reservedWordsDict))
 		{
 			matrixes[matrixName] = matrixLocation;
 		}
@@ -145,7 +149,8 @@ translate = function(input)
 		var otherName = match[2];
 		if(otherName in functions || otherName in matrixes)
 		{
-			if(!(matrixName in functions))
+			if(!(matrixName in functions)
+				&& !(matrixName in reservedWordsDict))
 			{
 				matrixes[matrixName] = matrixLocation;
 			}
@@ -161,7 +166,8 @@ translate = function(input)
 		var matrixName = match[1];
 		var matrixLocation = match.index;
 		var otherName = match[2];
-		if(!(matrixName in functions))
+		if(!(matrixName in functions)
+			&& !(matrixName in reservedWordsDict))
 		{
 			matrixes[matrixName] = matrixLocation;
 		}
@@ -534,7 +540,8 @@ translate = function(input)
 		var possibleMatrixNameEnd = match.index + possibleMatrixName.length;
 	
 		// not defined as matrix, but defined as function
-		if(!(possibleMatrixName in matrixes) && (possibleMatrixName in functions))
+		if(possibleMatrixName in reservedWordsDict
+			|| !(possibleMatrixName in matrixes) && (possibleMatrixName in functions))
 		{
 			// leave as is
 			
@@ -846,7 +853,8 @@ var knownFunctions = ["abs", "acos", "acosh", "acot", "acoth", "acsc", "acsch",
 var moreKnownFunctions = ["println", "cummax", "cummin", "diagm", "hcat", "vcat", "maximum",
 	"minimum", "Diagonal", "reverse", "eigen", "spzeros", "accumulate"];
 
-var knownNonFunctions = ["false", "pi", "true", "return"];
+// not functions, not matrix names
+var reservedWords = ["if", "for", "false", "pi", "true", "return", "while"];
 
 
 // to allow us to run the translate function from tests.js
