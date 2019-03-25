@@ -31,7 +31,7 @@ runTranslator = function()
 var commonErrorMessage = "\n\nPlease consider sending a bug report with your MATLAB code so that the bug causing this timeout can be fixed."
 		+ " You can file an issue on GitHub at the following URL:"
 		+ "\nhttps://github.com/lakras/matlab-to-julia/issues/"
-		+ "\nIf you prefer, you can alternatively fill out a Google form by copy/pasting the following URL:"
+		+ "\n\nIf you prefer, you can alternatively fill out a Google form by copy/pasting the following URL:"
 		+ "\nhttps://docs.google.com/forms/d/e/1FAIpQLScvH5sN-TLk69V5hipx9Afk54Srn8muBrhJuoV59KkLEeza-Q/viewform?usp=sfLink"
 		+ "\n\nIn the meantime, I recommend breaking your code into pieces and translating each piece separately "
 		+ "so that you can get what you can from this translator and get on with your work."
