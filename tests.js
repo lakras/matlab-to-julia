@@ -58,10 +58,10 @@ matlab = "A = j:k:n";
 julia  = "A = j:k:n";
 assert(julia === translator.translate(matlab));
 
-// TODO: Linearly spaced vector of k points
+// Linearly spaced vector of k points
 matlab = "A = linspace(1, 5, k)";
 julia  = "A = range(1, 5, length = k)";
-// assert(julia === translator.translate(matlab));
+assert(julia === translator.translate(matlab));
 
 // Create a matrix
 matlab = "A = [1 2; 3 4]";
