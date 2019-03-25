@@ -119,10 +119,10 @@ julia  = "x = [1, 2, 3]\n"
 	+ "Tridiagonal(x, y, z)";
 // assert(julia === translator.translate(matlab));
 
-// TODO: Transpose
+// Transpose
 matlab = "A.'";
 julia  = "transpose(A)";
-// assert(julia === translator.translate(matlab));
+assert(julia === translator.translate(matlab));
 
 // Complex conjugate transpose (Adjoint)
 matlab = "A'";

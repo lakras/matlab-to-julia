@@ -602,6 +602,12 @@ translate = function(input)
 	//       eye(2, 2) -> I
 	contents = contents.replace(/([^\w\d_])eye\(.+?,.+?\)/g, "$1I");
 	
+	// TRANSPOSE
+	//       A.' -> transpose(A)
+	//   (A+B).' -> transpose(A+B)
+	contents = contents.replace(/([^\w\d_])(\(.+?\))\s*[.]'/g, "$1transpose$2");
+	contents = contents.replace(/([^\w\d_])(\w+)\s*[.]'/g, "$1transpose($2)");
+	
 	// removes newline artificially added to start and end
  	contents = contents.substring(1, contents.length - 1);
 	
