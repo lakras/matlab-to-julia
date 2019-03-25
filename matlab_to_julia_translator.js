@@ -235,10 +235,10 @@ translate = function(input)
 	contents = contents.replace(/([^\w\d_])vertcat(\s*\(.*\))/g, "$1vcat$2");
 	
 	// FLIP
-	//		fliplr(A) -> flipdim(A, 2)
-	//		flipud(A) -> flipdim(A, 1)
-	contents = contents.replace(/([^\w\d_])fliplr(\s*)\((.*)\)/g, "$1flipdim$2($3, 2)");
-	contents = contents.replace(/([^\w\d_])flipud(\s*)\((.*)\)/g, "$1flipdim$2($3, 1)");
+	//		fliplr(A) -> reverse(A, dims = 2)
+	//		flipud(A) -> reverse(A, dims = 1)
+	contents = contents.replace(/([^\w\d_])fliplr(\s*)\((.*)\)/g, "$1reverse$2($3, dims = 2)");
+	contents = contents.replace(/([^\w\d_])flipud(\s*)\((.*)\)/g, "$1reverse$2($3, dims = 1)");
 	
 	// MAXIMUM AND MINIMUM
 	//		max(A, [], 1) -> maximum(A, 1)
@@ -760,7 +760,7 @@ var knownFunctions = ["abs", "acos", "acosh", "acot", "acoth", "acsc", "acsch",
 	"xmlread", "xmlwrite", "xor", "xslt", "zeros", "zip", "zoom"];
 
 var moreKnownFunctions = ["println", "cummax", "cummin", "diagm", "hcat", "vcat", "maximum",
-	"minimum", "Diagonal"];
+	"minimum", "Diagonal", "reverse"];
 
 var knownNonFunctions = ["false", "pi", "true"];
 

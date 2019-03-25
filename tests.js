@@ -160,12 +160,12 @@ assert(julia === translator.translate(matlab));
 // TODO: Flip left/right
 matlab = "fliplr(A)";
 julia  = "reverse(A, dims = 2)";
-// assert(julia === translator.translate(matlab));
+assert(julia === translator.translate(matlab));
 
 // TODO: Flip up/down
 matlab = "flipud(A)";
 julia  = "reverse(A, dims = 1)";
-// assert(julia === translator.translate(matlab));
+assert(julia === translator.translate(matlab));
 
 // TODO: Repeat matrix (3 times in the row dimension, 4 times in the column dimension)
 matlab = "repmat(A, 3, 4)";
