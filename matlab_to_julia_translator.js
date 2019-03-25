@@ -251,7 +251,7 @@ translate = function(input)
 	contents = contents.replace(/([^\w\d_])(sum\s*\(\s*\w+)\s*\(\s*:\s*\)(\s*\))/g, "$1$2$3");
 	contents = contents.replace(/([^\w\d_])max(\s*\(\s*\w+)\s*\(\s*:\s*\)(\s*\))/g, "$1maximum$2$3");
 	contents = contents.replace(/([^\w\d_])min(\s*\(\s*\w+)\s*\(\s*:\s*\)(\s*\))/g, "$1minimum$2$3");
-	
+
 	// FORMATTED PRINTING
 	//     MATLAB:
 	//         fprintf('My age is %d and my salary is %.2f\n', age, salary)
@@ -561,22 +561,26 @@ translate = function(input)
 	// 'bla' -> "bla"
 	contents = contents.replace(/'([^\n]{2,})'/g, "\"$1\"");
 	
-	// BITWISE OR
-	//               bitxor(a, b) -> a $ b
-	//     bitxor(a + b, c + d) -> (a + b) $ (c + d)
-	contents = contents.replace(/([^\w\d_])bitxor\s*\((\w*),(\s*)(\w*)\)/g, "$1$2$3\$ $3$4");
-	contents = contents.replace(/([^\w\d_])bitxor\s*\((.*),(\s*)(.*)\)/g, "$1\($2\)$3\$ $3($4\)");
+	// BITWISE XOR
+	//             bitxor(a, b) -> a xor b
+	//     bitxor(a + b, c + d) -> (a + b) xor (c + d)
+	contents = contents.replace(/([^\w\d_])bitxor\s*\((\w*),(\s*)(\w*)\)/g, "$1$2$3xor $3$4");
+	contents = contents.replace(/([^\w\d_])bitxor\s*\((.*),(\s*)(.*)\)/g, "$1\($2\)$3xor $3($4\)");
 
 	// BITWISE AND
-	//               bitand(a, b) -> a & b
+	//             bitand(a, b) -> a & b
 	//     bitand(a + b, c + d) -> (a + b) & (c + d)
+	//                  a and b -> a & b
 	contents = contents.replace(/([^\w\d_])bitand\s*\((\w*),(\s*)(\w*)\)/g, "$1$2$3\&$3$4");
 	contents = contents.replace(/([^\w\d_])bitand\s*\((.*),(\s*)(.*)\)/g, "$1\($2\)$3\&$3($4\)");
+	contents = contents.replace(/([^\w\d_])(.*)(\s+)and(\s+)(.*)/g, "$1$2$3\&$4$5");
 
 	// BITWISE OR
 	//      bitor(a, b) -> a | b
+	//           a or b -> a | b
 	contents = contents.replace(/([^\w\d_])bitor\s*\((\w*),(\s*)(\w*)\)/g, "$1$2$3\|$3$4");
 	contents = contents.replace(/([^\w\d_])bitor\s*\((.*),(\s*)(.*)\)/g, "$1\($2\)$3\|$3($4\)");
+	contents = contents.replace(/([^\w\d_])(.*)(\s+)or(\s+)(.*)/g, "$1$2$3\|$4$5");
 	
 	// removes newline artificially added to start and end
  	contents = contents.substring(1, contents.length - 1);

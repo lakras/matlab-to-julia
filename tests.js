@@ -27,14 +27,14 @@ matlab = "A > B";
 julia  = "A .> B";
 // assert(julia === translator.translate(matlab));
 
-// TODO: bitwise operations 
+// bitwise operations 
 matlab = "a and b";
 julia  = "a & b";
-// assert(julia === translator.translate(matlab));
+assert(julia === translator.translate(matlab));
 
 matlab = "a or b";
 julia  = "a | b";
-// assert(julia === translator.translate(matlab));
+assert(julia === translator.translate(matlab));
 
 matlab = "a xor b";
 julia  = "a xor b"; // or ⊻
