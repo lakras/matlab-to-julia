@@ -14,20 +14,20 @@ assert(julia === translator.translate(matlab));
 
 
 // from https://docs.julialang.org/en/latest/manual/noteworthy-differences/#Noteworthy-differences-from-MATLAB-1
-// TODO: logical comparison operations
+// logical comparison operations
 matlab = "A == B";
 julia  = "A .== B";
-// assert(julia === translator.translate(matlab));
+assert(julia === translator.translate(matlab));
 
 matlab = "A < B";
 julia  = "A .< B";
-// assert(julia === translator.translate(matlab));
+assert(julia === translator.translate(matlab));
 
 matlab = "A > B";
 julia  = "A .> B";
-// assert(julia === translator.translate(matlab));
+assert(julia === translator.translate(matlab));
 
-// bitwise operations 
+// bitwise operations
 matlab = "a and b";
 julia  = "a & b";
 assert(julia === translator.translate(matlab));

@@ -582,6 +582,14 @@ translate = function(input)
 	contents = contents.replace(/([^\w\d_])bitor\s*\((.*),(\s*)(.*)\)/g, "$1\($2\)$3\|$3($4\)");
 	contents = contents.replace(/([^\w\d_])(.*)(\s+)or(\s+)(.*)/g, "$1$2$3\|$4$5");
 	
+	// LOGICAL COMPARISON OPERATIONS
+	//       A == B -> A .== B
+	//        A < B -> A .< B
+	//        A > B -> A .> B
+	contents = contents.replace(/([^\w\d_])(.*)(\s+)==(\s+)(.*)/g, "$1$2$3.==$4$5");
+	contents = contents.replace(/([^\w\d_])(.*)(\s+)<(\s+)(.*)/g, "$1$2$3.<$4$5");
+	contents = contents.replace(/([^\w\d_])(.*)(\s+)>(\s+)(.*)/g, "$1$2$3.>$4$5");
+	
 	// removes newline artificially added to start and end
  	contents = contents.substring(1, contents.length - 1);
 	
