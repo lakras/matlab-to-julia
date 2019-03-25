@@ -282,6 +282,12 @@ translate = function(input)
 	//       sum(A, 2) -> sum(A, dims = 2)
 	contents = contents.replace(/([^\w\d_])(sum\s*\(\s*.+?,)(\s*)(\d+\s*\))/g, "$1$2$3dims$3=$3$4");
 	
+	// CUMULATIVE SUM BY ROW
+	//       cumsum(A, 1) -> cumsum(A, dims = 1)
+	// CUMULATIVE SUM BY COLUMN
+	//       cumsum(A, 2) -> cumsum(A, dims = 2)
+	contents = contents.replace(/([^\w\d_])(cumsum\s*\(\s*.+?,)(\s*)(\d+\s*\))/g, "$1$2$3dims$3=$3$4");
+	
 	// GET DIMENSIONS OF A MATRIX
 	//      [nrow ncol] = size(A) -> nrow, ncol = size(A)
 	contents = contents.replace(/\[\s*(.+?)(\s+.+?)\s*\](\s*=\s*size\s*\(.+?\))/g, "$1,$2$3");
@@ -655,6 +661,14 @@ translate = function(input)
 		contents = contents.replace(/([^\w\d_])(.*\[\s*\[.*[^,])(\s[^,]\s*.*\]\s*,\s*:\])/g, "$1$2,$3");
 	}
 	
+	// CUMULATIVE MIN, MAX BY ROW
+	//       cummin(A, 1) -> accumulate(min, A, dims = 1)
+	//       cummax(A, 1) -> accumulate(max, A, dims = 1)
+	// CUMULATIVE MIN, MAX BY COLUMN
+	//       cummax(A, 2) -> accumulate(max, A, dims = 2)
+	//       cummin(A, 2) -> accumulate(min, A, dims = 2)
+	contents = contents.replace(/([^\w\d_])cummin(\s*)\((\s*.+?,)(\s*)(\d+\s*\))/g, "$1accumulate$2(min,$4$3$4dims$4=$4$5");
+	contents = contents.replace(/([^\w\d_])cummax(\s*)\((\s*.+?,)(\s*)(\d+\s*\))/g, "$1accumulate$2(max,$4$3$4dims$4=$4$5");
 	
 	// determines which packages to add
 	var packages = "";
@@ -822,7 +836,7 @@ var knownFunctions = ["abs", "acos", "acosh", "acot", "acoth", "acsc", "acsch",
 	"xmlread", "xmlwrite", "xor", "xslt", "zeros", "zip", "zoom"];
 
 var moreKnownFunctions = ["println", "cummax", "cummin", "diagm", "hcat", "vcat", "maximum",
-	"minimum", "Diagonal", "reverse", "eigen", "spzeros"];
+	"minimum", "Diagonal", "reverse", "eigen", "spzeros", "accumulate"];
 
 var knownNonFunctions = ["false", "pi", "true"];
 

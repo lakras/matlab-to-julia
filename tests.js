@@ -317,35 +317,35 @@ matlab = "min(A(:))";
 julia  = "minimum(A)";
 assert(julia === translator.translate(matlab));
 
-// TODO0: Cumulative sum by row
+// Cumulative sum by row
 matlab = "cumsum(A, 1)";
 julia  = "cumsum(A, dims = 1)";
-// assert(julia === translator.translate(matlab));
+assert(julia === translator.translate(matlab));
 
-// TODO0: Cumulative max by row
+// Cumulative max by row
 matlab = "cummax(A, 1)";
 julia  = "accumulate(max, A, dims = 1)";
 // assert(julia === translator.translate(matlab));
 
-// TODO0: Cumulative min by row
+// Cumulative min by row
 matlab = "cummin(A, 1)";
 julia  = "accumulate(min, A, dims = 1)";
-// assert(julia === translator.translate(matlab));
+assert(julia === translator.translate(matlab));
 
-// TODO0: Cumulative sum by column
+// Cumulative sum by column
 matlab = "cumsum(A, 2)";
 julia  = "cumsum(A, dims = 2)";
-// assert(julia === translator.translate(matlab));
+assert(julia === translator.translate(matlab));
 
-// TODO0: Cumulative max by column
+// Cumulative max by column
 matlab = "cummax(A, 2)";
 julia  = "accumulate(max, A, dims = 2)";
-// assert(julia === translator.translate(matlab));
+assert(julia === translator.translate(matlab));
 
-// TODO0: Cumulative min by column
+// Cumulative min by column
 matlab = "cummin(A, 2)";
 julia  = "accumulate(min, A, dims = 2)";
-// assert(julia === translator.translate(matlab));
+assert(julia === translator.translate(matlab));
 
 // Comment one line
 matlab = "% This is a comment";
