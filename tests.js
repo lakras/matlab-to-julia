@@ -83,10 +83,10 @@ matlab = "A = eye(2, 2)";
 julia  = "A = I";
 assert(julia === translator.translate(matlab));
 
-// TODO: Diagonal matrix
+// Diagonal matrix
 matlab = "A = diag([1 2 3])";
 julia  = "A = Diagonal([1, 2, 3])";
-// assert(julia === translator.translate(matlab));
+assert(julia === translator.translate(matlab));
 
 // Uniform random numbers
 matlab = "A = rand(2, 2)";

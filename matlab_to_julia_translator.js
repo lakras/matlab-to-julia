@@ -212,17 +212,21 @@ translate = function(input)
 	
 	// IMAGINARY UNIT
 	//     sqrt(-1) -> im
-	contents = contents.replace(/([^\w\d_])sqrt\(-1\)/g, "$1im");
+	contents = contents.replace(/([^\w\d_])sqrt\s*\(\s*-1\s*\)/g, "$1im");
 
 	// MODULUS
 	//          mod(a, b) -> a % b
 	// mod(a + b, c + d) -> (a + b) % (c + d)
-	contents = contents.replace(/([^\w\d_])mod\s*\((\w*),(\s*)(\w*)\)/g, "$1$2$3\%$3$4");
-	contents = contents.replace(/([^\w\d_])mod\s*\((.*),(\s*)(.*)\)/g, "$1\($2\)$3\%$3($4\)");
+	contents = contents.replace(/([^\w\d_])mod\s*\((\w+?),(\s*)(\w+?)\)/g, "$1$2$3\%$3$4");
+	contents = contents.replace(/([^\w\d_])mod\s*\((.+?),(\s*)(.+?)\)/g, "$1\($2\)$3\%$3($4\)");
 
 	// DIAGONAL MATRIX
-	//		diag([1 2 3]) -> diagm([1; 2; 3])
-	contents = contents.replace(/([^\w\d_])diag(\s*\(.*\))/g, "$1diagm$2");
+	//		diag([1 2 3]) -> Diagonal([1, 2, 3])
+	while(/([^\w\d_])(diag\(\s*\[.*[^,])(\s[^,]\s*.*]\s*\))/.test(contents))
+	{
+		contents = contents.replace(/([^\w\d_])(diag\(\s*\[.*[^,])(\s[^,]\s*.*]\s*\))/g, "$1$2,$3");
+	}
+	contents = contents.replace(/([^\w\d_])diag(\s*\(.+?\))/g, "$1Diagonal$2");
 	
 	// CONCATENATION
 	//		horzcat([1 2], [1 2]) -> hcat([1 2], [1 2])
@@ -749,7 +753,8 @@ var knownFunctions = ["abs", "acos", "acosh", "acot", "acoth", "acsc", "acsch",
 	"workspace", "xlabel", "ylabel", "zlabel", "xlim", "ylim", "zlim", "xlsfinfo", "xlsread",
 	"xmlread", "xmlwrite", "xor", "xslt", "zeros", "zip", "zoom"];
 
-var moreKnownFunctions = ["println", "cummax", "cummin", "diagm", "hcat", "vcat", "maximum", "minimum"];
+var moreKnownFunctions = ["println", "cummax", "cummin", "diagm", "hcat", "vcat", "maximum",
+	"minimum", "Diagonal"];
 
 var knownNonFunctions = ["false", "pi", "true"];
 
