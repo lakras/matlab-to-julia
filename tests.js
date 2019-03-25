@@ -48,10 +48,10 @@ matlab = "A = [1 2 3]";
 julia  = "A = [1 2 3]";
 assert(julia === translator.translate(matlab));
 
-// TODO: Column vector: size (n, 1)
+// Column vector: size (n, 1)
 matlab = "A = [1; 2; 3]";
 julia  = "A = [1 2 3]'";
-// assert(julia === translator.translate(matlab));
+assert(julia === translator.translate(matlab));
 
 // Integers from j to n with step size k
 matlab = "A = j:k:n";
@@ -272,35 +272,35 @@ matlab = "A\b";
 julia  = "A\b";
 assert(julia === translator.translate(matlab));
 
-// TODO: Sum of each column
+// Sum of each column
 matlab = "sum(A, 1)";
 julia  = "sum(A, dims = 1)";
-// assert(julia === translator.translate(matlab));
+assert(julia === translator.translate(matlab));
 
-// TODO: Max of each column
+// Max of each column
 matlab = "max(A, [], 1)";
 julia  = "maximum(A, dims = 1)";
-// assert(julia === translator.translate(matlab));
+assert(julia === translator.translate(matlab));
 
-// TODO: Min of each column
+// Min of each column
 matlab = "min(A, [], 1)";
 julia  = "minimum(A, dims = 1)";
-// assert(julia === translator.translate(matlab));
+assert(julia === translator.translate(matlab));
 
-// TODO: Sum of each row
+// Sum of each row
 matlab = "sum(A, 2)";
 julia  = "sum(A, dims = 2)";
-// assert(julia === translator.translate(matlab));
+assert(julia === translator.translate(matlab));
 
-// TODO: Max of each row
+// Max of each row
 matlab = "max(A, [], 2)";
 julia  = "maximum(A, dims = 2)";
-// assert(julia === translator.translate(matlab));
+assert(julia === translator.translate(matlab));
 
-// TODO: Min of each row
+// Min of each row
 matlab = "min(A, [], 2)";
 julia  = "minimum(A, dims = 2)";
-// assert(julia === translator.translate(matlab));
+assert(julia === translator.translate(matlab));
 
 // Sum of entire matrix
 matlab = "sum(A(:))";
@@ -317,32 +317,32 @@ matlab = "min(A(:))";
 julia  = "minimum(A)";
 assert(julia === translator.translate(matlab));
 
-// TODO: Cumulative sum by row
+// TODO0: Cumulative sum by row
 matlab = "cumsum(A, 1)";
 julia  = "cumsum(A, dims = 1)";
 // assert(julia === translator.translate(matlab));
 
-// TODO: Cumulative max by row
+// TODO0: Cumulative max by row
 matlab = "cummax(A, 1)";
 julia  = "accumulate(max, A, dims = 1)";
 // assert(julia === translator.translate(matlab));
 
-// TODO: Cumulative min by row
+// TODO0: Cumulative min by row
 matlab = "cummin(A, 1)";
 julia  = "accumulate(min, A, dims = 1)";
 // assert(julia === translator.translate(matlab));
 
-// TODO: Cumulative sum by column
+// TODO0: Cumulative sum by column
 matlab = "cumsum(A, 2)";
 julia  = "cumsum(A, dims = 2)";
 // assert(julia === translator.translate(matlab));
 
-// TODO: Cumulative max by column
+// TODO0: Cumulative max by column
 matlab = "cummax(A, 2)";
 julia  = "accumulate(max, A, dims = 2)";
 // assert(julia === translator.translate(matlab));
 
-// TODO: Cumulative min by column
+// TODO0: Cumulative min by column
 matlab = "cummin(A, 2)";
 julia  = "accumulate(min, A, dims = 2)";
 // assert(julia === translator.translate(matlab));
@@ -435,7 +435,7 @@ julia  = "m = (x = 1, y = 2)"
 	+ "m.x";
 // assert(julia === translator.translate(matlab));
 
-// TODO: Closures
+// Closures
 // passes if "compact (one-line) Julia functions" is selected
 matlab = "a = 2.0"
 	+ "f = @(x) a + x"

@@ -230,9 +230,13 @@ translate = function(input)
 	}
 	contents = contents.replace(/([^\w\d_])diag(\(\s*\[.+?\]\s*\))/g, "$1Diagonal$2");
 	
-	// ROW REMOVAL
-	//    A([1 2 4], :) -> A[[1, 2, 4], :]
-	
+	// COLUMN VECTOR
+	//       [1; 2; 3] -> [1 2 3]'
+	contents = contents.replace(/(\[\s*\S+?\s*;.+?\])/g, "$1'");
+	while(/(\[.+?;\s*\S+?\s*\])/.test(contents))
+	{
+		contents = contents.replace(/(\[.+?);\s{0,1}(\s*.+?\])/g, "$1 $2");
+	}
 	
 	// CONCATENATION
 	//		horzcat([1 2], [1 2]) -> hcat([1 2], [1 2])
@@ -251,8 +255,15 @@ translate = function(input)
 	//		max(A, [], 2) -> maximum(A, 2)
 	//		min(A, [], 1) -> minimum(A, 1)
 	//		min(A, [], 2) -> minimum(A, 2)
-	contents = contents.replace(/([^\w\d_])max(\s*\(\s*\w+\s*,\s*)\[\s*\]\s*,\s*(\d+\s*\))/g, "$1maximum$2$3");
-	contents = contents.replace(/([^\w\d_])min(\s*\(\s*\w+\s*,\s*)\[\s*\]\s*,\s*(\d+\s*\))/g, "$1minimum$2$3");
+	
+	// MIN, MAX OF EACH COLUMN
+	//       min(A, [], 1) -> minimum(A, dims = 1)
+	//       max(A, [], 1) -> maximum(A, dims = 1)
+	// MIN, MAX OF EACH ROW
+	//       min(A, [], 2) -> minimum(A, dims = 2)
+	//       max(A, [], 2) -> maximum(A, dims = 2)
+	contents = contents.replace(/([^\w\d_])max(\s*\(\s*\w+\s*,\s*)\[\s*\]\s*,(\s*)(\d+\s*\))/g, "$1maximum$2dims$3=$3$4");
+	contents = contents.replace(/([^\w\d_])min(\s*\(\s*\w+\s*,\s*)\[\s*\]\s*,(\s*)(\d+\s*\))/g, "$1minimum$2dims$3=$3$4");
 	
 	// SUM, MAX, MIN on entire matrix
 	// 		sum(A(:)) -> sum(A)
@@ -261,6 +272,12 @@ translate = function(input)
 	contents = contents.replace(/([^\w\d_])(sum\s*\(\s*\w+)\s*\(\s*:\s*\)(\s*\))/g, "$1$2$3");
 	contents = contents.replace(/([^\w\d_])max(\s*\(\s*\w+)\s*\(\s*:\s*\)(\s*\))/g, "$1maximum$2$3");
 	contents = contents.replace(/([^\w\d_])min(\s*\(\s*\w+)\s*\(\s*:\s*\)(\s*\))/g, "$1minimum$2$3");
+	
+	// SUM OF EACH COLUMN
+	//       sum(A, 1) -> sum(A, dims = 1)
+	// SUM OF EACH ROW
+	//       sum(A, 2) -> sum(A, dims = 2)
+	contents = contents.replace(/([^\w\d_])(sum\s*\(\s*.+?,)(\s*)(\d+\s*\))/g, "$1$2$3dims$3=$3$4");
 	
 	// GET DIMENSIONS OF A MATRIX
 	//      [nrow ncol] = size(A) -> nrow, ncol = size(A)
