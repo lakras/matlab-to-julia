@@ -98,15 +98,15 @@ matlab = "A = randn(2, 2)";
 julia  = "A = randn(2, 2)";
 assert(julia === translator.translate(matlab));
 
-// TODO: Sparse Matrices
+// Sparse Matrices
 matlab = "A = sparse(2, 2)\n"
 	+ "A(1, 2) = 4\n"
 	+ "A(2, 2) = 1";
-julia  = "using SparseArrays\n"
+julia  = "using SparseArrays\n\n"
 	+ "A = spzeros(2, 2)\n"
 	+ "A[1, 2] = 4\n"
 	+ "A[2, 2] = 1";
-// assert(julia === translator.translate(matlab));
+assert(julia === translator.translate(matlab));
 
 // TODO: Tridiagonal Matrices
 matlab = "A = [1 2 3 NaN;\n"

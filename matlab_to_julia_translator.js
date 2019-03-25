@@ -204,7 +204,6 @@ translate = function(input)
 	// replaces commas at the middles of lines (but not between parentheses or
 	// curly or square brackets) with semicolons
 	contents = contents.replace(/(^[^\(\[\{]*?),([^\)\]\}]*?\n+)/g, "$1;$2"); // first occurrence
-	if(/%{/.test(line))
 	while(/(\n+[^\(\[\{]*?),([^\)\]\}]*?\n+)/.test(contents)) // all other occurrences
 	{
 		contents = contents.replace(/(\n+[^\(\[\{]*?),([^\)\]\}]*?\n+)/g, "$1;$2");
@@ -272,6 +271,10 @@ translate = function(input)
 	contents = contents.replace(/([^\w\d_])(sum\s*\(\s*\w+)\s*\(\s*:\s*\)(\s*\))/g, "$1$2$3");
 	contents = contents.replace(/([^\w\d_])max(\s*\(\s*\w+)\s*\(\s*:\s*\)(\s*\))/g, "$1maximum$2$3");
 	contents = contents.replace(/([^\w\d_])min(\s*\(\s*\w+)\s*\(\s*:\s*\)(\s*\))/g, "$1minimum$2$3");
+	
+	// SPARSE MATRICES
+	//     sparse(2, 2) -> spzeros(2, 2)
+	contents = contents.replace(/([^\w\d_])sparse(\(.+?\))/g, "$1spzeros$2");
 	
 	// SUM OF EACH COLUMN
 	//       sum(A, 1) -> sum(A, dims = 1)
@@ -652,13 +655,28 @@ translate = function(input)
 		contents = contents.replace(/([^\w\d_])(.*\[\s*\[.*[^,])(\s[^,]\s*.*\]\s*,\s*:\])/g, "$1$2,$3");
 	}
 	
+	
+	// determines which packages to add
+	var packages = "";
+	if(/([^\w\d_])plot\(.*\)/.test(contents))
+	{
+		// plotting package
+		packages = "using PyPlot\n" + packages;
+	}
+	
+	if(/[^\w\d_]spzeros\(.+?\)/.test(contents))
+	{
+		// SparseArrays package
+		packages = "using SparseArrays\n" + packages;
+	}
+	
 	// removes newline artificially added to start and end
  	contents = contents.substring(1, contents.length - 1);
 	
-	// adds PLOTTING PACKAGE if necessary
-	if(/([^\w\d_])plot\((.*)\)/.test(contents) || /^plot\((.*)\)/.test(contents))
+	// adds packages
+	if(packages.length > 0)
 	{
-		contents = "using PyPlot\n\n" + contents;
+		contents = packages + "\n" + contents;
 	}
 	
 	return contents;
@@ -804,7 +822,7 @@ var knownFunctions = ["abs", "acos", "acosh", "acot", "acoth", "acsc", "acsch",
 	"xmlread", "xmlwrite", "xor", "xslt", "zeros", "zip", "zoom"];
 
 var moreKnownFunctions = ["println", "cummax", "cummin", "diagm", "hcat", "vcat", "maximum",
-	"minimum", "Diagonal", "reverse", "eigen"];
+	"minimum", "Diagonal", "reverse", "eigen", "spzeros"];
 
 var knownNonFunctions = ["false", "pi", "true"];
 
