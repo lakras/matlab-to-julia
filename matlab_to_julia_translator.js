@@ -656,10 +656,20 @@ translate = function(input)
 	//    A([1 2 4], :) -> A[[1, 2, 4], :]
 	// note that this replacement is AFTER () -> [], so in practice this is
 	//    A[[1 2 4], :] -> A[[1, 2, 4], :]
-	while(/([^\w\d_])(.*\[\s*\[.*[^,])(\s[^,]\s*.*\]\s*,\s*:\])/.test(contents))
+	while(/([^\w\d_])(.*\[\s*\[.*[^,])(\s[^,]\s*[^\[\]]*\]\s*,\s*:\])/.test(contents))
 	{
-		contents = contents.replace(/([^\w\d_])(.*\[\s*\[.*[^,])(\s[^,]\s*.*\]\s*,\s*:\])/g, "$1$2,$3");
+		contents = contents.replace(/([^\w\d_])(.*\[\s*\[.*[^,])(\s[^,]\s*[^\[\]]*\]\s*,\s*:\])/g, "$1$2,$3");
 	}
+	
+	// TUPLES
+	//     {1 2.0 "test"} -> (1, 2.0, "test")
+	//	             t{1} -> t[1]
+	while(/([^\w\d_])(\{.*[^,])(\s[^,]\s*[^{}]*\})/.test(contents))
+	{
+		contents = contents.replace(/([^\w\d_])(\{.*[^,])(\s[^,]\s*[^{}]*\})/g, "$1$2,$3");
+	}
+	contents = contents.replace(/\{(.+?,.+?)\}/g, "($1)");
+	contents = contents.replace(/([\w\d_]\s*)\{(.+?)\}/g, "$1[$2]");
 	
 	// CUMULATIVE MIN, MAX BY ROW
 	//       cummin(A, 1) -> accumulate(min, A, dims = 1)

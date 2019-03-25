@@ -406,13 +406,13 @@ matlab = "fprintf('x = %d \n', x)";
 julia  = "println(\"x = $x\")";
 // assert(julia === translator.translate(matlab));
 
-// TODO: Function: anonymous
+// Function: anonymous
 matlab = "f = @(x) x^2";
 julia  = "f = (x) -> x^2";
-// assert(julia === translator.translate(matlab));
+assert(julia === translator.translate(matlab));
 
 // TODO: Function
-matlab = "function out  = f(x)"
+matlab = "function out = f(x)"
 	+ "  out = x^2"
 	+ "end";
 julia  = "function f(x)"
@@ -420,12 +420,12 @@ julia  = "function f(x)"
 	+ "end";
 // assert(julia === translator.translate(matlab));
 
-// TODO: Tuples
-matlab = "t = {1 2.0 \"test\"}"
+// Tuples
+matlab = "t = {1 2.0 3 4}"
 	+ "t{1}";
-julia  = "t = (1, 2.0, \"test\")"
+julia  = "t = (1, 2.0, 3, 4)"
 	+ "t[1]";
-// assert(julia === translator.translate(matlab));
+assert(julia === translator.translate(matlab));
 
 // TODO: Named Tuples/ Anonymous Structures
 matlab = "m.x = 1"
