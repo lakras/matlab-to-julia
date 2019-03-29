@@ -89,7 +89,7 @@ translate = function(input)
 			functions[functionName] = functionLocation;
 		}
 	}
-	// function [anything] = object(anything)
+	// function [anything] = anything(anything)
 	var regex = /(function\s*?\[?)(.*?)(\]?\s*?=\s*)(.*?)\s*?\((.*?)\)/g;
 	var match;
 	while(match = regex.exec(input))
@@ -486,7 +486,7 @@ translate = function(input)
 	//    f -> f()
 	for(var functionName in functions)
  	{
-		var regex = new RegExp("([^\\w\\d_])("+functionName+")(\\s*[^\\w\\d_(=\\s])");
+		var regex = new RegExp("([^\\w\\d_])("+functionName+")(\\s*[^\\w\\d_(=\\s]\[\])");
  		while(regex.test(contents))
  		{
  			contents = contents.replace(regex, "$1$2\(\)$3");
@@ -769,7 +769,7 @@ var knownFunctions = ["abs", "acos", "acosh", "acot", "acoth", "acsc", "acsch",
 	"flow", "fmin", "fminbnd", "fmins", "fminsearch", "fopen", "fopen", "format",
 	"fplot", "fprintf", "fprintf", "frame2im", "frameedit", "fread", "fread", "freeserial",
 	"freqspace", "frewind", "fscanf", "fscanf", "fseek", "ftell", "full", "fullfile",
-	"func2str", "function", "functionHandle", "functions", "funm", "fwrite", "fwrite",
+	"func2str", "functionHandle", "functions", "funm", "fwrite", "fwrite", // "function",
 	"fzero", "gallery", "gamma", "gammainc", "gammaln", "gca", "gcbf", "gcbo", "gcd", "gcf",
 	"gco", "genpath", "get", "getappdata", "getenv", "getfield",
 	"getframe", "ginput", "global", "gmres", "gplot", "gradient", "graymon", "grid",
@@ -854,7 +854,8 @@ var moreKnownFunctions = ["println", "cummax", "cummin", "diagm", "hcat", "vcat"
 	"minimum", "Diagonal", "reverse", "eigen", "spzeros", "accumulate"];
 
 // not functions, not matrix names
-var reservedWords = ["if", "for", "false", "pi", "true", "return", "while"];
+var reservedWords = ["if", "for", "false", "pi", "true", "return", "while", "include",
+	"function"];
 
 
 // to allow us to run the translate function from tests.js
