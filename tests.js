@@ -412,6 +412,9 @@ julia  = "f = (x) -> x^2";
 assert(julia === translator.translate(matlab));
 
 // Functions
+// function out = f(x)
+//   out = x^2
+// end
 matlab = "function out = f(x)\n"
 	+ "  out = x^2\n"
 	+ "end";
@@ -421,6 +424,10 @@ julia  = "function f(x)\n"
 	+ "end";
 assert(julia === translator.translate(matlab));
 
+// function[c f] = temperature(x, y)
+//   f = x + y
+//   c = x * y
+// end
 matlab = "function[c f] = temperature(x, y)\n"
 	+ "  f = x + y\n"
 	+ "  c = x * y\n"
@@ -433,6 +440,8 @@ julia  = "function temperature(x, y)\n"
 assert(julia === translator.translate(matlab));
 
 // Tuples
+// t = {1 2.0 3 4}
+// t{1}
 matlab = "t = {1 2.0 3 4}"
 	+ "t{1}";
 julia  = "t = (1, 2.0, 3, 4)"
@@ -456,3 +465,32 @@ julia  = "a = 2.0"
 	+ "f(x) = a + x"
 	+ "f(1.0)";
 // assert(julia === translator.translate(matlab));
+
+
+
+// Functions that don't return anything
+// from top answer in
+//     https://stackoverflow.com/questions/12992619/can-a-function-be-created-in-matlab-that-returns-nothing
+
+// function [] = my_awesome_function(image,filename,other_inputs)
+//   % Do awesome things
+// end
+matlab = "function [] = my_awesome_function(image,filename,other_inputs)\n"
+	+ "  % Do awesome things\n"
+	+ "end";
+julia  = "function my_awesome_function(image,filename,other_inputs)\n"
+	+ "  # Do awesome things\n"
+	+ "end";
+assert(julia === translator.translate(matlab));
+
+// function my_awesome_function(image,filename,other_inputs)
+//   % Do awesome things
+// end
+matlab = "function my_awesome_function(image,filename,other_inputs)\n"
+	+ "  % Do awesome things\n"
+	+ "end";
+julia  = "function my_awesome_function(image,filename,other_inputs)\n"
+	+ "  # Do awesome things\n"
+	+ "end";
+assert(julia === translator.translate(matlab));
+

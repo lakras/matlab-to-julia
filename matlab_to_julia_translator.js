@@ -102,6 +102,19 @@ translate = function(input)
 			functions[functionName] = functionLocation;
 		}
 	}
+	// function anything(anything)
+	var regex = /function\s+(.+?)\s*\([^\n]*\)/g;
+	var match;
+	while(match = regex.exec(input))
+	{
+		var functionName = match[1];
+		var functionLocation = indexOfGroup(match, 1);
+		if(!(functionName in matrixes)
+			&& !(functionName in reservedWordsDict))
+		{
+			functions[functionName] = functionLocation;
+		}
+	}
 	
 	// SAVES NAMES OF PROBABLE MATRICES
 	//        matrixName = load anything
@@ -333,7 +346,8 @@ translate = function(input)
 	//            b = x * y;                        |         b = x * y;        
 	//         end <- optional                      |         return [a b]
 	//                                              |     end
-	if(/(function)\s*(\[?.*?\]?)\s*?=\s*(.*?)\s*?\((.*?)\)\n*?(\s*)((\n*?.*?)*?)/.test(contents))
+	if(/(function)\s*(\[?.*?\]?)\s*?=\s*(.*?)\s*?\((.*?)\)\n*?(\s*)((\n*?.*?)*?)/.test(contents)
+		|| /(function)()\s*(.*?)\s*?\((.*?)\)\n*?(\s*)((\n*?.*?)*?)/.test(contents))
 	{
 		// locates all end keywords
 		var endLocations = [];
@@ -417,7 +431,8 @@ translate = function(input)
  				var returnLocation = endLocations[endIndex - 1] - 1;
  				whitespace = whitespace.replace(/^\n(\s*)/g, "$1");
  				whitespace = whitespace.replace(/(\s*)\n$/g, "$1");
- 				if(returnStatement.length > 0)
+ 				if(returnStatement.length > 0
+ 					&& !/\s*\[\s*\]\s*/.test(returnStatement))
  				{
  					returnStatement = whitespace + "return " + returnStatement + "";
  					
