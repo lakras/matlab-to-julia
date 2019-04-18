@@ -660,7 +660,8 @@ translate = function(input)
 	
 	// IDENTITY MATRIX
 	//       eye(2, 2) -> I
-	contents = contents.replace(/([^\w\d_])eye\s*\(.+?,.+?\)/g, "$1I");
+	var linearAlgebraPackage = /([^\w\d_])eye\s*\([^()]*\)/.test(contents);
+	contents = contents.replace(/([^\w\d_])eye\s*\([^()]*\)/g, "$1I");
 	
 	// REPEAT MATRIX FUNCTION
 	//       repmat(A, 3, 4) -> repeat(A, 3, 4)
@@ -702,6 +703,11 @@ translate = function(input)
 	
 	// determines which packages to add
 	var packages = "";
+	if(linearAlgebraPackage)
+	{
+		// LinearAlgebra package
+		packages = "using LinearAlgebra\n" + packages;
+	}
 	if(/([^\w\d_])plot\(.*\)/.test(contents))
 	{
 		// plotting package

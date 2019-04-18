@@ -80,7 +80,8 @@ assert(julia === translator.translate(matlab));
 
 // 2 x 2 identity matrix
 matlab = "A = eye(2, 2)";
-julia  = "A = I";
+julia  = "using LinearAlgebra\n\n"
+	+ "A = I";
 assert(julia === translator.translate(matlab));
 
 // Diagonal matrix
