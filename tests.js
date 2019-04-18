@@ -494,3 +494,19 @@ julia  = "function my_awesome_function(image,filename,other_inputs)\n"
 	+ "end";
 assert(julia === translator.translate(matlab));
 
+
+
+// from issue https://github.com/lakras/matlab-to-julia/issues/7
+// transpose
+// X = u*v';
+matlab = "X = u*v'";
+julia  = "X = u*v'";
+assert(julia === translator.translate(matlab));
+
+// quotes
+// X = 'hello there';
+matlab = "X = 'hello there'";
+julia  = "X = \"hello there\"";
+assert(julia === translator.translate(matlab));
+
+
