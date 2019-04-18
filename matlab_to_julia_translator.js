@@ -199,6 +199,9 @@ translate = function(input)
  	// adds newline to start so we don't have to deal with start of string
  	contents = "\n" + contents;
  	
+ 	// defines set of packages to be added
+ 	var packages = new Set();
+ 	
  	// BLOCK COMMENTS
 	//     replace all instances of %{ with #=
 	//     replace all instances of %} with =#
@@ -660,7 +663,10 @@ translate = function(input)
 	
 	// IDENTITY MATRIX
 	//       eye(2, 2) -> I
-	var linearAlgebraPackage = /([^\w\d_])eye\s*\([^()]*\)/.test(contents);
+	if(/([^\w\d_])eye\s*\([^()]*\)/.test(contents))
+	{
+		packages.add("LinearAlgebra");
+	}
 	contents = contents.replace(/([^\w\d_])eye\s*\([^()]*\)/g, "$1I");
 	
 	// REPEAT MATRIX FUNCTION
@@ -702,31 +708,32 @@ translate = function(input)
 	contents = contents.replace(/([^\w\d_])cummax(\s*)\((\s*.+?,)(\s*)(\d+\s*\))/g, "$1accumulate$2(max,$4$3$4dims$4=$4$5");
 	
 	// determines which packages to add
-	var packages = "";
-	if(linearAlgebraPackage)
-	{
-		// LinearAlgebra package
-		packages = "using LinearAlgebra\n" + packages;
-	}
 	if(/([^\w\d_])plot\(.*\)/.test(contents))
 	{
 		// plotting package
-		packages = "using PyPlot\n" + packages;
+		packages.add("PyPlot");
 	}
 	
 	if(/[^\w\d_]spzeros\(.+?\)/.test(contents))
 	{
 		// SparseArrays package
-		packages = "using SparseArrays\n" + packages;
+		packages.add("SparseArrays");
+	}
+	
+	// builds packages text to add to translated code
+	var packagesText = "";
+	for(var packageToAdd of packages)
+	{
+		packagesText = "using " + packageToAdd + "\n" + packagesText;
 	}
 	
 	// removes newline artificially added to start and end
  	contents = contents.substring(1, contents.length - 1);
 	
 	// adds packages
-	if(packages.length > 0)
+	if(packagesText.length > 0)
 	{
-		contents = packages + "\n" + contents;
+		contents = packagesText + "\n" + contents;
 	}
 	
 	return contents;
