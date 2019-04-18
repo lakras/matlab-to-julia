@@ -661,14 +661,6 @@ translate = function(input)
 	//      linspace(1, 5, k) -> range(1, 5, length = k)
 	contents = contents.replace(/([^\w\d_])linspace(\s*\(.*,\s*.*,)(\s*)(.*\))/g, "$1range$2$3length$3=$3$4");
 	
-	// IDENTITY MATRIX
-	//       eye(2, 2) -> I
-	if(/([^\w\d_])eye\s*\([^()]*\)/.test(contents))
-	{
-		packages.add("LinearAlgebra");
-	}
-	contents = contents.replace(/([^\w\d_])eye\s*\([^()]*\)/g, "$1I");
-	
 	// REPEAT MATRIX FUNCTION
 	//       repmat(A, 3, 4) -> repeat(A, 3, 4)
 	contents = contents.replace(/([^\w\d_])repmat(\s*\(.+?\))/g, "$1repeat$2");
@@ -707,7 +699,26 @@ translate = function(input)
 	contents = contents.replace(/([^\w\d_])cummin(\s*)\((\s*.+?,)(\s*)(\d+\s*\))/g, "$1accumulate$2(min,$4$3$4dims$4=$4$5");
 	contents = contents.replace(/([^\w\d_])cummax(\s*)\((\s*.+?,)(\s*)(\d+\s*\))/g, "$1accumulate$2(max,$4$3$4dims$4=$4$5");
 	
-	// determines which packages to add
+	// IDENTITY MATRIX, IN CONTEXT OF KRON
+	//      kron(something, eye(bla)) -> kron(something, Eye{Int}(bla))
+	//      kron(eye(bla), something) -> kron(Eye{Int}(bla), something)
+	if(/([^\w\d_])(kron\s*\(\s*)eye(\s*\([^()]*\)\s*,\s*[^()]+\s*\))/.test(contents)
+		|| /([^\w\d_])(kron\s*\(\s*[^()]+\s*,\s*)eye(\s*\([^()]*\)\s*\))/.test(contents))
+	{
+		packages.add("FillArrays");
+	}
+	contents = contents.replace(/([^\w\d_])(kron\s*\(\s*)eye(\s*\([^()]*\)\s*,\s*[^()]+\s*\))/g, "$1$2Eye{Int}$3");
+	contents = contents.replace(/([^\w\d_])(kron\s*\(\s*[^()]+\s*,\s*)eye(\s*\([^()]*\)\s*\))/g, "$1$2Eye{Int}$3");
+	
+	// IDENTITY MATRIX
+	//       eye(2, 2) -> I
+	if(/([^\w\d_])eye\s*\([^()]*\)/.test(contents))
+	{
+		packages.add("LinearAlgebra");
+	}
+	contents = contents.replace(/([^\w\d_])eye\s*\([^()]*\)/g, "$1I");
+	
+	// searches for additional packages to add
 	if(/([^\w\d_])plot\(.*\)/.test(contents))
 	{
 		// plotting package

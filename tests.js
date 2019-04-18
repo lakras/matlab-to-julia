@@ -511,3 +511,17 @@ julia  = "X = \"hello there\"";
 assert(julia === translator.translate(matlab));
 
 
+// from issue https://github.com/lakras/matlab-to-julia/issues/8
+// identity matrix in the context of kron
+// kron(A, eye(2))
+matlab = "kron(A, eye(2))";
+julia  = "using FillArrays\n\n"
+	+ "kron(A, Eye{Int}(2))";
+assert(julia === translator.translate(matlab));
+
+// kron(eye(2), A)
+matlab = "kron(eye(2), A)";
+julia  = "using FillArrays\n\n"
+	+ "kron(Eye{Int}(2), A)";
+assert(julia === translator.translate(matlab));
+
