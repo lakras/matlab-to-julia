@@ -707,8 +707,8 @@ translate = function(input)
 	{
 		packages.add("FillArrays");
 	}
-	contents = contents.replace(/([^\w\d_])(kron\s*\(\s*)eye(\s*\([^()]*\)\s*,\s*[^()]+\s*\))/g, "$1$2Eye{Int}$3");
-	contents = contents.replace(/([^\w\d_])(kron\s*\(\s*[^()]+\s*,\s*)eye(\s*\([^()]*\)\s*\))/g, "$1$2Eye{Int}$3");
+	contents = contents.replace(/([^\w\d_])(kron\s*\(\s*[^\w\d_]*)eye(\s*\([^()]*\)\s*,\s*[^()]+\s*\))/g, "$1$2Eye{Int}$3");
+	contents = contents.replace(/([^\w\d_])(kron\s*\(\s*[^()]+\s*,\s*[^\w\d_]*)eye(\s*\([^()]*\)\s*\))/g, "$1$2Eye{Int}$3");
 	
 	// IDENTITY MATRIX
 	//       eye(2, 2) -> I
