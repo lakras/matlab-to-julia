@@ -17,4 +17,4 @@ The incorrectly translated MATLAB code.
 The _correct_ Julia translation (not what the translator outputs).
 
 **Comments, suggestions, and other helpful details**
-Any special steps to reproduce the failed translation, beyond copy/pasting the MATLAB input and clicking "translate." Anything else that might be helpful.
+Any special steps to reproduce the failed translation, beyond copy/pasting the MATLAB input and clicking "translate." Anything else that might be helpful. Thank you!
